@@ -9,7 +9,7 @@ import { useCart } from '../store/useCart';
 
 const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: any) => void }) => (
   <div 
-    className="bg-white/5 rounded-[32px] overflow-hidden border border-white/5 hover:border-[#00ff00]/30 transition-all group flex flex-col gpu"
+    className="bg-white/5 rounded-[32px] overflow-hidden border border-white/5 hover:border-[#7c3aed]/30 transition-all group flex flex-col gpu"
   >
     <div className="relative aspect-square overflow-hidden">
       <img 
@@ -19,7 +19,7 @@ const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: a
         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
       />
       <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-        <span className="text-xs font-black text-[#00ff00]">R$ {(product.price / 100).toFixed(2)}</span>
+        <span className="text-xs font-black text-[#7c3aed]">R$ {(product.price / 100).toFixed(2)}</span>
       </div>
     </div>
     
@@ -34,7 +34,7 @@ const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: a
           e.stopPropagation();
           onSelect(product);
         }}
-        className="w-full bg-white text-black py-4 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-[#00ff00] transition-colors"
+        className="w-full bg-white text-black py-4 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-[#7c3aed] hover:text-white transition-colors"
       >
         <Plus className="w-4 h-4" /> ADICIONAR AO CARRINHO
       </button>
@@ -174,7 +174,7 @@ export default function CustomerApp() {
                 placeholder="Buscar..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs outline-none w-32 focus:w-48 transition-all focus:border-[#00ff00]"
+                className="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs outline-none w-32 focus:w-48 transition-all focus:border-[#7c3aed]"
               />
             </div>
           )}
@@ -192,7 +192,7 @@ export default function CustomerApp() {
                 key={cat.id}
                 onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold uppercase transition-all ${
-                  activeCategory === cat.id && !searchQuery ? 'bg-[#00ff00] text-black' : 'bg-white/10 text-white/60'
+                  activeCategory === cat.id && !searchQuery ? 'bg-[#ef4444] text-white shadow-[0_5px_15px_rgba(239,68,68,0.3)]' : 'bg-white/10 text-white/60'
                 }`}
               >
                 {cat.name}
@@ -239,10 +239,10 @@ export default function CustomerApp() {
                         <div>
                           <h4 className="text-sm font-bold uppercase">{item.name}</h4>
                           {item.selectedOptions.map(opt => (
-                            <span key={opt.id} className="text-[10px] text-[#00ff00] block">+ {opt.name}</span>
+                            <span key={opt.id} className="text-[10px] text-[#7c3aed] block">+ {opt.name}</span>
                           ))}
                         </div>
-                        <span className="text-sm font-black text-[#00ff00]">R$ {(item.price * item.quantity / 100).toFixed(2)}</span>
+                        <span className="text-sm font-black text-[#7c3aed]">R$ {(item.price * item.quantity / 100).toFixed(2)}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <button onClick={() => cart.updateQuantity(item.id, item.quantity - 1)} className="p-1 bg-white/10 rounded-full"><Minus className="w-3 h-3" /></button>
@@ -268,14 +268,14 @@ export default function CustomerApp() {
                       maxLength={8}
                       value={address.cep}
                       onChange={(e) => handleCEPChange(e.target.value)}
-                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none focus:border-[#00ff00]" 
+                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none focus:border-[#7c3aed]" 
                      />
                      <input 
                       type="text" 
                       placeholder="Rua / Logradouro" 
                       value={address.street}
                       onChange={(e) => setAddress({...address, street: e.target.value})}
-                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none focus:border-[#00ff00]" 
+                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none focus:border-[#7c3aed]" 
                      />
                      <div className="grid grid-cols-2 gap-3">
                        <input 
@@ -338,7 +338,7 @@ export default function CustomerApp() {
                         key={method.id}
                         onClick={() => setPayment({...payment, method: method.id})}
                         className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
-                          payment.method === method.id ? 'bg-[#00ff00] border-[#00ff00] text-black font-bold' : 'bg-white/5 border-white/10'
+                          payment.method === method.id ? 'bg-[#7c3aed] border-[#7c3aed] text-white font-bold' : 'bg-white/5 border-white/10'
                         }`}
                       >
                         <method.icon className="w-5 h-5" />
@@ -363,17 +363,17 @@ export default function CustomerApp() {
           {activeView === 'success' && (
             <motion.div key="success" className="text-center py-10 space-y-6">
               <div className="relative inline-block">
-                <CheckCircle2 className="w-24 h-24 text-[#00ff00] mx-auto" />
+                <CheckCircle2 className="w-24 h-24 text-[#7c3aed] mx-auto" />
                 <motion.div 
                   initial={{ scale: 0 }} animate={{ scale: 1.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 2 }}
-                  className="absolute inset-0 border-4 border-[#00ff00] rounded-full"
+                  className="absolute inset-0 border-4 border-[#7c3aed] rounded-full"
                 />
               </div>
-              <h2 className="text-3xl font-black uppercase text-[#00ff00]">Sucesso!</h2>
+              <h2 className="text-3xl font-black uppercase text-[#7c3aed]">Sucesso!</h2>
               <div className="bg-white/5 p-6 rounded-3xl border border-white/10 space-y-2 text-left">
                 <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Status do Pedido</p>
                 <div className="flex items-center gap-3">
-                   <div className="w-2 h-2 rounded-full bg-[#00ff00] animate-pulse" />
+                   <div className="w-2 h-2 rounded-full bg-[#7c3aed] animate-pulse" />
                    <p className="text-sm font-bold">PREPARANDO NA COZINHA</p>
                 </div>
                 <p className="text-xs opacity-60">Seu Delivery Global chegará em aproximadamente 30 minutos.</p>
@@ -404,13 +404,13 @@ export default function CustomerApp() {
           {activeView === 'menu' && (
             <button 
               onClick={() => setActiveView('cart')}
-              className="w-full bg-[#00ff00] text-black p-4 rounded-2xl font-black uppercase tracking-widest flex justify-between items-center shadow-[0_0_30px_rgba(0,255,0,0.2)] active:scale-95 transition-all"
+              className="w-full bg-[#7c3aed] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex justify-between items-center shadow-[0_10px_30px_rgba(124,58,237,0.3)] active:scale-95 transition-all"
             >
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <ShoppingBag className="w-5 h-5" />
                   {cart.items.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-black text-[#00ff00] text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center">{cart.items.length}</span>
+                    <span className="absolute -top-2 -right-2 bg-black text-[#7c3aed] text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center">{cart.items.length}</span>
                   )}
                 </div>
                 <span className="text-xs">VER CARRINHO</span>
@@ -422,7 +422,7 @@ export default function CustomerApp() {
             <button 
               disabled={cart.items.length === 0}
               onClick={() => setActiveView('checkout')}
-              className="w-full bg-[#00ff00] text-black p-4 rounded-2xl font-black uppercase tracking-widest flex justify-between items-center shadow-[0_0_30px_rgba(0,255,0,0.2)] disabled:opacity-50 disabled:grayscale transition-all"
+              className="w-full bg-[#7c3aed] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex justify-between items-center shadow-[0_10px_30px_rgba(124,58,237,0.3)] disabled:opacity-50 disabled:grayscale transition-all"
             >
               <span className="text-xs">IR PARA PAGAMENTO</span>
               <ChevronRight className="w-5 h-5" />
@@ -443,7 +443,7 @@ export default function CustomerApp() {
                   if (checkoutStep < 3) setCheckoutStep(prev => prev + 1);
                   else finalizeOrder();
                 }}
-                className="flex-1 bg-[#00ff00] text-black p-4 rounded-2xl font-black uppercase tracking-widest flex justify-center items-center gap-2"
+                className="flex-1 bg-[#7c3aed] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex justify-center items-center gap-2 shadow-[0_10px_30px_rgba(124,58,237,0.3)]"
               >
                 <span>{checkoutStep < 3 ? 'CONTINUAR' : 'CONCLUIR PEDIDO'}</span>
                 <ChevronRight className="w-5 h-5" />
@@ -494,14 +494,14 @@ export default function CustomerApp() {
                           }
                         }}
                         className={`w-full flex justify-between items-center p-4 rounded-2xl border transition-all ${
-                          selectedOptions.find(o => o.id === opt.id) ? 'bg-[#00ff00]/10 border-[#00ff00]' : 'bg-white/5 border-white/5'
+                          selectedOptions.find(o => o.id === opt.id) ? 'bg-[#7c3aed]/10 border-[#7c3aed]' : 'bg-white/5 border-white/5'
                         }`}
                       >
                         <span className="text-xs font-bold uppercase">{opt.name}</span>
                         <div className="flex items-center gap-2">
                            <span className="text-[10px] opacity-60">+ R$ {(opt.price / 100).toFixed(2)}</span>
                            <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                             selectedOptions.find(o => o.id === opt.id) ? 'bg-[#00ff00] border-[#00ff00] text-black' : 'border-white/20'
+                             selectedOptions.find(o => o.id === opt.id) ? 'bg-[#7c3aed] border-[#7c3aed] text-white' : 'border-white/20'
                            }`}>
                              {selectedOptions.find(o => o.id === opt.id) && <CheckCircle2 className="w-3 h-3" />}
                            </div>
@@ -548,11 +548,11 @@ export default function CustomerApp() {
               <div className="pt-4 space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-bold uppercase opacity-50">Total do Item</span>
-                    <span className="text-xl font-black text-[#00ff00]">R$ {(currentPrice / 100).toFixed(2)}</span>
+                    <span className="text-xl font-black text-[#7c3aed]">R$ {(currentPrice / 100).toFixed(2)}</span>
                   </div>
                   <button 
                     onClick={addToCartInternal}
-                    className="w-full bg-[#00ff00] text-black p-5 rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all"
+                    className="w-full bg-[#7c3aed] text-white p-5 rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all"
                   >
                     ADICIONAR AO CARRINHO
                   </button>

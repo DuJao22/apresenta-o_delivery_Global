@@ -36,7 +36,7 @@ export default function IntroLoader({ onComplete }: { onComplete: () => void }) 
           rotate: [0, 90, 0]
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-        className="absolute w-[800px] h-[800px] border border-[#00ff00]/5 rounded-full pointer-events-none" 
+        className="absolute w-[800px] h-[800px] border border-[#7c3aed]/5 rounded-full pointer-events-none" 
       />
       
       <div className="relative z-10 flex flex-col items-center">
@@ -45,7 +45,7 @@ export default function IntroLoader({ onComplete }: { onComplete: () => void }) 
             initial={{ y: 200 }}
             animate={{ y: stage === 0 ? 0 : -200 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-6xl md:text-9xl font-display uppercase tracking-tighter leading-none text-[#00ff00] text-glow italic"
+            className="text-6xl md:text-9xl font-display uppercase tracking-tighter leading-none text-[#7c3aed] text-glow italic"
           >
             DELIVERY
           </motion.h1>
@@ -67,7 +67,7 @@ export default function IntroLoader({ onComplete }: { onComplete: () => void }) 
           <motion.div 
             initial={{ scaleX: 0 }}
             animate={{ scaleX: progress / 100 }}
-            className="absolute inset-0 bg-[#00ff00] origin-left shadow-[0_0_20px_rgba(0,255,0,0.5)]"
+            className="absolute inset-0 bg-[#7c3aed] origin-left shadow-[0_0_20px_rgba(124,58,237,0.5)]"
           />
         </div>
         
@@ -89,7 +89,7 @@ export default function IntroLoader({ onComplete }: { onComplete: () => void }) 
       
       <div className="absolute top-12 right-12 text-right">
         <p className="text-[8px] font-black uppercase tracking-widest opacity-20">PROTOCOLO v4.0</p>
-        <p className="text-[8px] font-black uppercase tracking-widest opacity-20 text-[#00ff00]">CONEXÃO SEGURA</p>
+        <p className="text-[8px] font-black uppercase tracking-widest opacity-20 text-[#7c3aed]">CONEXÃO SEGURA</p>
       </div>
     </motion.div>
   );

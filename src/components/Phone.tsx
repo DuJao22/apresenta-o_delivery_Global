@@ -105,13 +105,13 @@ export default function Phone({ scrollRef }: PhoneProps) {
   return (
     <group ref={phoneRef}>
       {/* Dynamic Key Lighting */}
-      <spotLight position={[5, 10, 5]} intensity={1.5} color="#00ff00" />
-      <spotLight position={[-5, 5, -5]} intensity={0.5} color="#ffffff" />
+      <spotLight position={[5, 10, 5]} intensity={1.5} color="#7c3aed" />
+      <spotLight position={[-5, 5, -5]} intensity={0.5} color="#ef4444" />
       
       {/* High-End Atmospheric Glow Plane */}
       <mesh position={[0, 0, -0.2]} scale={[1.2, 1.2, 1]}>
         <planeGeometry args={[4, 6]} />
-        <meshBasicMaterial color="#00ff00" transparent opacity={0.05} blending={THREE.AdditiveBlending} />
+        <meshBasicMaterial color="#7c3aed" transparent opacity={0.05} blending={THREE.AdditiveBlending} />
       </mesh>
 
       <RoundedBox args={[2, 4, 0.15]} radius={0.15} smoothness={4} material={mats.case} />
@@ -134,7 +134,7 @@ export default function Phone({ scrollRef }: PhoneProps) {
             overflow: 'auto',
             borderRadius: '44px',
             boxSizing: 'border-box',
-            boxShadow: '0 0 40px rgba(0,255,0,0.1)'
+            boxShadow: '0 0 40px rgba(124,58,237,0.2)'
           }}
         >
           <div className="w-full h-full scale-[1] origin-top overflow-auto no-scrollbar pointer-events-auto">

@@ -46,12 +46,12 @@ export default function DriverApp() {
       <header className="p-8 bg-gradient-to-b from-white/5 to-transparent border-b border-white/5">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#00ff00] flex items-center justify-center text-black shadow-[0_0_20px_rgba(0,255,0,0.3)]">
+            <div className="w-12 h-12 rounded-2xl bg-[#7c3aed] flex items-center justify-center text-white shadow-[0_0_20px_rgba(124,58,237,0.3)]">
               <User size={24} />
             </div>
             <div>
               <h1 className="text-sm font-black uppercase tracking-widest leading-none">Carlos Silva</h1>
-              <p className="text-[10px] text-[#00ff00] font-black uppercase tracking-tight mt-1 opacity-80">Eco Entregador #29</p>
+              <p className="text-[10px] text-[#7c3aed] font-black uppercase tracking-tight mt-1 opacity-80">Eco Entregador #29</p>
             </div>
           </div>
           <button className="bg-white/5 p-3 rounded-2xl border border-white/10 text-white/40 hover:text-white transition-colors">
@@ -62,7 +62,7 @@ export default function DriverApp() {
         <div className="bg-white/5 p-6 rounded-[32px] border border-white/10 flex justify-between items-center">
           <div>
              <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-30 mb-1">Ganhos de Hoje</p>
-             <p className="text-2xl font-black text-[#00ff00]">R$ {(pastOrders.length * deliveryFee / 100).toFixed(2)}</p>
+             <p className="text-2xl font-black text-[#7c3aed]">R$ {(pastOrders.length * deliveryFee / 100).toFixed(2)}</p>
           </div>
           <div className="h-10 w-[1px] bg-white/10" />
           <div className="text-right">
@@ -77,7 +77,7 @@ export default function DriverApp() {
         <button 
           onClick={() => setActiveTab('deliveries')}
           className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
-            activeTab === 'deliveries' ? 'bg-[#00ff00] text-black shadow-lg' : 'bg-white/5 text-white/30'
+            activeTab === 'deliveries' ? 'bg-[#7c3aed] text-white shadow-lg' : 'bg-white/5 text-white/30'
           }`}
         >
           Minhas Rotas
@@ -85,7 +85,7 @@ export default function DriverApp() {
         <button 
           onClick={() => setActiveTab('history')}
           className={`flex-1 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
-            activeTab === 'history' ? 'bg-[#00ff00] text-black shadow-lg' : 'bg-white/5 text-white/30'
+            activeTab === 'history' ? 'bg-[#7c3aed] text-white shadow-lg' : 'bg-white/5 text-white/30'
           }`}
         >
           Histórico
@@ -109,29 +109,28 @@ export default function DriverApp() {
                   <p className="text-xs font-black uppercase tracking-widest">Nenhuma rota ativa</p>
                 </div>
               ) : (
-                activeOrders.map((order) => (
-                  <motion.div 
+                activeOrders.map((order) => (                  <motion.div 
                     key={order.id}
-                    className="bg-white/5 rounded-[40px] p-8 border border-white/5 space-y-6 group hover:border-[#00ff00]/30 transition-colors"
+                    className="bg-white/5 rounded-[40px] p-8 border border-white/5 space-y-6 group hover:border-[#7c3aed]/30 transition-colors"
                   >
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-3">
-                        <div className="p-3 bg-[#00ff00]/10 rounded-2xl">
-                          <Package className="w-5 h-5 text-[#00ff00]" />
+                        <div className="p-3 bg-[#7c3aed]/10 rounded-2xl">
+                          <Package className="w-5 h-5 text-[#7c3aed]" />
                         </div>
                         <div>
                           <p className="text-xs font-black uppercase tracking-widest">#{order.id}</p>
-                          <p className={`text-[9px] font-black uppercase tracking-tight ${order.status === 'PREPARING' ? 'text-yellow-500' : 'text-blue-500'}`}>
+                          <p className={`text-[9px] font-black uppercase tracking-tight ${order.status === 'PREPARING' ? 'text-yellow-500' : 'text-[#7c3aed]'}`}>
                             {order.status === 'PREPARING' ? 'Em Preparo' : 'Aguardando Coleta'}
                           </p>
                         </div>
                       </div>
-                      <span className="text-lg font-black text-[#00ff00]">R$ 5,00</span>
+                      <span className="text-lg font-black text-[#7c3aed]">R$ 5,00</span>
                     </div>
                     
                     <div className="space-y-4">
                       <div className="flex items-start gap-4">
-                        <MapPin className="w-5 h-5 text-[#00ff00] mt-1 flex-shrink-0" />
+                        <MapPin className="w-5 h-5 text-[#7c3aed] mt-1 flex-shrink-0" />
                         <div>
                           <p className="text-[10px] opacity-40 uppercase font-black tracking-widest mb-1">Destino Final</p>
                           <p className="text-sm font-bold leading-relaxed">{order.address}</p>
@@ -143,12 +142,12 @@ export default function DriverApp() {
                           <p className="text-[11px] font-bold uppercase">{order.customer_name}</p>
                           <p className="text-[9px] opacity-40 font-bold">{order.customer_phone}</p>
                         </div>
-                        <a href={`tel:${order.customer_phone}`} className="p-2 bg-white/5 rounded-xl hover:bg-[#00ff00]/20 transition-colors">
-                           <Phone size={14} className="text-[#00ff00]" />
+                        <a href={`tel:${order.customer_phone}`} className="p-2 bg-white/5 rounded-xl hover:bg-[#7c3aed]/20 transition-colors">
+                           <Phone size={14} className="text-[#7c3aed]" />
                         </a>
                       </div>
                     </div>
-    
+     
                     <div className="flex gap-3 pt-2">
                        <a 
                         href={`https://maps.google.com/?q=${encodeURIComponent(order.address)}`}
@@ -159,11 +158,12 @@ export default function DriverApp() {
                        </a>
                        <button 
                         onClick={() => completeDelivery(order.id)}
-                        className="flex-[1.5] bg-[#00ff00] text-black p-5 rounded-3xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg"
+                        className="flex-[1.5] bg-[#7c3aed] text-white p-5 rounded-3xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg"
                        >
                          <CheckCircle2 size={16} /> Entregue
                        </button>
                     </div>
+
                   </motion.div>
                 ))
               )}
@@ -183,9 +183,9 @@ export default function DriverApp() {
               ) : (
                 pastOrders.map(order => (
                   <div key={order.id} className="bg-white/5 p-6 rounded-3xl border border-white/5 flex justify-between items-center group overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#00ff00]/5 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#7c3aed]/5 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500" />
                     <div className="flex gap-4 items-center">
-                      <div className="w-10 h-10 rounded-2xl bg-[#00ff00]/10 flex items-center justify-center text-[#00ff00]">
+                      <div className="w-10 h-10 rounded-2xl bg-[#7c3aed]/10 flex items-center justify-center text-[#7c3aed]">
                         <CheckCircle2 size={16} />
                       </div>
                       <div>
@@ -193,7 +193,7 @@ export default function DriverApp() {
                         <p className="text-[9px] opacity-40 font-bold uppercase">{new Date().toLocaleDateString()}</p>
                       </div>
                     </div>
-                    <p className="text-sm font-black text-[#00ff00]">R$ 5,00</p>
+                    <p className="text-sm font-black text-[#7c3aed]">R$ 5,00</p>
                   </div>
                 ))
               )}

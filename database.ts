@@ -89,10 +89,10 @@ export function initDb() {
 
     // Initial Products
     const products = [
-      { id: 'p1', cat: 'cat1', name: 'Global Burger Clássico', desc: 'Pão brioche, carne 180g, queijo cheddar, alface e tomate.', price: 3200, img: 'https://picsum.photos/seed/burger1/400/400' },
-      { id: 'p2', cat: 'cat1', name: 'Monster Green', desc: 'Blend especial, bacon crocante, maionese verde e cebola roxa.', price: 4500, img: 'https://picsum.photos/seed/burger2/400/400' },
-      { id: 'p3', cat: 'cat2', name: 'Coca-Cola 350ml', desc: 'Geladinha.', price: 600, img: 'https://picsum.photos/seed/soda1/400/400' },
-      { id: 'p4', cat: 'cat3', name: 'Batata Rústica', desc: 'Crocante por fora, macia por dentro.', price: 1800, img: 'https://picsum.photos/seed/fries1/400/400' }
+      { id: 'p1', cat: 'cat1', name: 'Global Burger Clássico', desc: 'Pão brioche, carne 180g, queijo cheddar, alface e tomate.', price: 3200, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&h=400' },
+      { id: 'p2', cat: 'cat1', name: 'Monster Green', desc: 'Blend especial, bacon crocante, maionese verde e cebola roxa.', price: 4500, img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&h=400' },
+      { id: 'p3', cat: 'cat2', name: 'Coca-Cola 350ml', desc: 'Geladinha.', price: 600, img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=400&h=400' },
+      { id: 'p4', cat: 'cat3', name: 'Batata Rústica', desc: 'Crocante por fora, macia por dentro.', price: 1800, img: 'https://images.unsplash.com/photo-1573016608964-b49ca021ca66?auto=format&fit=crop&w=400&h=400' }
     ];
 
     const insertProd = db.prepare('INSERT INTO products (id, category_id, name, description, price, image_url) VALUES (?, ?, ?, ?, ?, ?)');
@@ -109,6 +109,17 @@ export function initDb() {
     const insertOpt = db.prepare('INSERT INTO product_options (id, product_id, name, price) VALUES (?, ?, ?, ?)');
     options.forEach(o => insertOpt.run(o.id, o.prod, o.name, o.price));
   }
+
+  // Force update existing images to ensure users see Burgers instead of Mountains
+  const updatePromises = [
+    { id: 'p1', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&h=400' },
+    { id: 'p2', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&h=400' },
+    { id: 'p3', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=400&h=400' },
+    { id: 'p4', img: 'https://images.unsplash.com/photo-1573016608964-b49ca021ca66?auto=format&fit=crop&w=400&h=400' }
+  ];
+  
+  const updateStmt = db.prepare('UPDATE products SET image_url = ? WHERE id = ?');
+  updatePromises.forEach(p => updateStmt.run(p.img, p.id));
 }
 
 export default db;

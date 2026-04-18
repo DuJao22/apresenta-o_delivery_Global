@@ -119,7 +119,7 @@ function LandingPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="bg-[#050505] text-white selection:bg-[#00ff00] selection:text-black min-h-[6000px] grain overflow-x-hidden">
+    <div ref={containerRef} className="bg-[#030014] text-white selection:bg-[#7c3aed] selection:text-white min-h-[6000px] grain overflow-x-hidden">
       <AnimatePresence mode="wait">
         {!introFinished && (
           <IntroLoader key="loader" onComplete={() => setIntroFinished(true)} />
@@ -139,7 +139,7 @@ function LandingPage() {
       {/* Scroll Progress Bar (Apple style) */}
       <div className="fixed top-0 left-0 w-full h-[2px] bg-white/5 z-[200]">
         <div 
-          className="progress-bar-fill h-full bg-[#00ff00] origin-left shadow-[0_0_10px_rgba(0,255,0,0.5)]"
+          className="progress-bar-fill h-full bg-[#7c3aed] origin-left shadow-[0_0_10px_rgba(124,58,237,0.5)]"
         />
       </div>
       
@@ -160,8 +160,8 @@ function LandingPage() {
               </div>
               
               <div className="flex gap-12 text-[10px] font-black tracking-[0.3em] uppercase opacity-40 pointer-events-auto items-center">
-                <button onClick={() => navigate('/app')} className="hover:text-[#00ff00] transition-colors">Experience</button>
-                <button onClick={() => navigate('/admin')} className="hover:text-[#00ff00] transition-colors">Terminal</button>
+                <button onClick={() => navigate('/app')} className="hover:text-[#7c3aed] transition-colors">Experience</button>
+                <button onClick={() => navigate('/admin')} className="hover:text-[#7c3aed] transition-colors">Terminal</button>
                 <div className="flex items-end gap-[2px] h-3 ml-4">
                   {[...Array(6)].map((_, i) => (
                     <motion.div 
@@ -181,14 +181,14 @@ function LandingPage() {
               transition={{ duration: 1, delay: 1.5 }}
               className="scroll-indicator fixed bottom-12 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-4 pointer-events-none"
             >
-              <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-[#00ff00]/50 to-transparent relative overflow-hidden">
+              <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-[#7c3aed]/50 to-transparent relative overflow-hidden">
                 <motion.div 
                   animate={{ y: [0, 48] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="absolute top-0 left-0 w-full h-1/4 bg-[#00ff00]"
+                  className="absolute top-0 left-0 w-full h-1/4 bg-[#7c3aed]"
                 />
               </div>
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#00ff00] opacity-60">Scroll para explorar</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#7c3aed] opacity-60">Scroll para explorar</p>
             </motion.div>
           </>
         )}
@@ -209,13 +209,13 @@ function LandingPage() {
             Seu delivery está te fazendo <br /> <span className="text-[#ff4444]">perder dinheiro...</span>
           </h2>
           <h2 className="narrative-2 absolute text-4xl md:text-6xl font-display uppercase tracking-tighter leading-none opacity-0">
-            Ou te fazendo <br /> <span className="text-[#00ff00]">crescer todos os dias?</span>
+            Ou te fazendo <br /> <span className="text-[#7c3aed]">crescer todos os dias?</span>
           </h2>
 
           {/* Scene 2 */}
           <div className="narrative-3 absolute right-0 md:right-20 text-right max-w-sm opacity-0">
             <h2 className="text-5xl md:text-7xl font-display uppercase tracking-tighter leading-none mb-6">
-              Um sistema <br /> <span className="text-[#00ff00]">completo</span>
+              Um sistema <br /> <span className="text-[#7c3aed]">completo</span>
             </h2>
             <p className="text-sm font-bold uppercase tracking-widest opacity-40">
               Interface desenhada para converter cada visita em pedido.
@@ -224,7 +224,7 @@ function LandingPage() {
 
           {/* Scene 3 */}
           <div className="narrative-4 absolute bg-black/60 backdrop-blur-md p-8 rounded-3xl border border-white/10 opacity-0">
-            <h3 className="text-[#00ff00] text-xs font-black uppercase tracking-[0.3em] mb-4">Eficiência Máxima</h3>
+            <h3 className="text-[#7c3aed] text-xs font-black uppercase tracking-[0.3em] mb-4">Eficiência Máxima</h3>
             <h2 className="text-4xl md:text-6xl font-display uppercase tracking-tighter leading-none">
               Pedidos rápidos <br /> em segundos
             </h2>
@@ -232,7 +232,7 @@ function LandingPage() {
 
           <div className="narrative-5 absolute left-0 md:left-20 text-left max-w-sm opacity-0">
             <h2 className="text-5xl md:text-7xl font-display uppercase tracking-tighter leading-none mb-6">
-              Controle <br /> <span className="text-[#00ff00]">Total</span>
+              Controle <br /> <span className="text-[#7c3aed]">Total</span>
             </h2>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest opacity-50">
@@ -248,7 +248,7 @@ function LandingPage() {
           </div>
 
           {/* Scene 4 */}
-          <div className="notification-received absolute top-20 bg-[#00ff00] text-black px-8 py-4 rounded-2xl flex items-center gap-4 shadow-[0_0_50px_rgba(0,255,0,0.3)] opacity-0">
+          <div className="notification-received absolute top-20 bg-[#7c3aed] text-white px-8 py-4 rounded-2xl flex items-center gap-4 shadow-[0_0_50px_rgba(124,58,237,0.3)] opacity-0">
             <Bell className="animate-bounce" />
             <div className="text-left">
               <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Sistema Alpha</p>
@@ -258,9 +258,9 @@ function LandingPage() {
 
           {/* Scene 5 */}
           <div className="result-graph absolute w-full max-w-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-12 rounded-[40px] opacity-0 flex flex-col items-center">
-             <TrendingUp size={48} className="text-[#00ff00] mb-8" />
+             <TrendingUp size={48} className="text-[#ef4444] mb-8" />
              <p className="text-xs font-black uppercase tracking-[0.4em] opacity-30 mb-2">Faturamento Escalável</p>
-             <h2 className="result-value text-7xl md:text-9xl font-display leading-none mb-8 tracking-tighter">
+             <h2 className="result-value text-7xl md:text-9xl font-display leading-none mb-8 tracking-tighter text-[#ef4444]">
                R$ 0
              </h2>
              <h3 className="narrative-6 text-xl md:text-2xl font-light opacity-60 max-w-md">
@@ -273,7 +273,7 @@ function LandingPage() {
             Pare de depender de apps que cobram <span className="text-[#ff4444]">taxas absurdas.</span>
           </h2>
           <h2 className="narrative-8 absolute text-5xl md:text-8xl font-display uppercase tracking-tighter leading-[0.8] text-center max-w-4xl opacity-0">
-            Tenha seu próprio <br /> <span className="text-[#00ff00]">Delivery Global.</span>
+            Tenha seu próprio <br /> <span className="text-[#7c3aed]">Delivery Global.</span>
           </h2>
 
           {/* Scene 7 */}
@@ -283,7 +283,7 @@ function LandingPage() {
                   <h4 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-1">Assinatura Anual</h4>
                   <h3 className="text-4xl font-display uppercase tracking-tighter">Premium Plan</h3>
                </div>
-               <div className="bg-[#00ff00] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Oferta Limitada</div>
+               <div className="bg-[#ef4444] text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Oferta Limitada</div>
              </div>
              
              <div className="mb-12">
@@ -299,14 +299,14 @@ function LandingPage() {
                   "Suporte Prioritário 24/7"
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-xs font-bold uppercase tracking-tight">
-                    <CheckCircle size={14} className="text-[#00ff00]" /> {item}
+                    <CheckCircle size={14} className="text-[#7c3aed]" /> {item}
                   </div>
                 ))}
              </div>
 
              <button 
               onClick={() => window.location.href = 'https://delivery-global.onrender.com/'}
-              className="w-full bg-black text-white p-6 rounded-3xl font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 hover:bg-[#00ff00] hover:text-black transition-all group"
+              className="w-full bg-[#7c3aed] text-white p-6 rounded-3xl font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 hover:bg-[#ef4444] transition-all group"
              >
                Quero meu sistema agora <ArrowRight className="group-hover:translate-x-2 transition-transform" />
              </button>

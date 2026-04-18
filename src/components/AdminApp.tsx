@@ -44,17 +44,17 @@ export default function AdminApp() {
   };
 
   const stats = [
-    { label: 'Faturamento Hoje', value: `R$ ${(orders.reduce((acc, o) => acc + o.total, 0) / 100).toFixed(2)}`, icon: DollarSign, color: 'text-[#00ff00]' },
+    { label: 'Faturamento Hoje', value: `R$ ${(orders.reduce((acc, o) => acc + o.total, 0) / 100).toFixed(2)}`, icon: DollarSign, color: 'text-[#7c3aed]' },
     { label: 'Pedidos Ativos', value: orders.filter(o => o.status !== 'COMPLETED').length, icon: Clock, color: 'text-blue-400' },
-    { label: 'Taxa de Entrega', value: 'R$ 5,00', icon: TrendingUp, color: 'text-purple-400' },
+    { label: 'Taxa de Entrega', value: 'R$ 5,00', icon: TrendingUp, color: 'text-[#ef4444]' },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'PENDING': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20';
       case 'PREPARING': return 'text-blue-500 bg-blue-500/10 border-blue-500/20';
-      case 'DELIVERING': return 'text-purple-500 bg-purple-500/10 border-purple-500/20';
-      case 'COMPLETED': return 'text-[#00ff00] bg-[#00ff00]/10 border-[#00ff00]/20';
+      case 'DELIVERING': return 'text-[#7c3aed] bg-[#7c3aed]/10 border-[#7c3aed]/20';
+      case 'COMPLETED': return 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20';
       default: return 'text-gray-500 bg-gray-500/10';
     }
   };
@@ -65,8 +65,8 @@ export default function AdminApp() {
     <div className="min-h-screen bg-[#050505] text-white flex font-sans overflow-hidden h-screen w-full">
       {/* Sidebar */}
       <aside className="w-16 md:w-64 bg-black border-r border-white/5 flex flex-col p-6 gap-8">
-        <div className="p-2 font-black text-xl italic tracking-tighter text-[#00ff00] uppercase hidden md:block">ADMIN DASH</div>
-        <div className="md:hidden p-2 font-black text-[#00ff00]">A</div>
+        <div className="p-2 font-black text-xl italic tracking-tighter text-[#7c3aed] uppercase hidden md:block">ADMIN DASH</div>
+        <div className="md:hidden p-2 font-black text-[#7c3aed]">A</div>
 
         <nav className="flex flex-col gap-2 flex-1">
           {[
@@ -80,7 +80,7 @@ export default function AdminApp() {
               key={item.id} 
               onClick={() => setActiveTab(item.id as any)}
               className={`flex items-center gap-4 p-4 rounded-2xl transition-all whitespace-nowrap overflow-hidden ${
-                activeTab === item.id ? 'bg-[#00ff00] text-black font-black' : 'hover:bg-white/5 text-white/40'
+                activeTab === item.id ? 'bg-[#7c3aed] text-white font-black shadow-[0_5px_15px_rgba(124,58,237,0.3)]' : 'hover:bg-white/5 text-white/40'
               }`}
             >
               <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -91,7 +91,7 @@ export default function AdminApp() {
 
         <div className="p-4 bg-white/5 rounded-3xl border border-white/10 hidden md:block font-sans">
            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 rounded-full bg-[#00ff00] animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[#7c3aed] animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">Servidor On</span>
            </div>
            <p className="text-[9px] opacity-40 leading-relaxed uppercase">Última atualização: {new Date().toLocaleTimeString()}</p>
@@ -110,7 +110,7 @@ export default function AdminApp() {
           <div className="flex gap-3">
              <button className="bg-white/5 p-4 rounded-2xl border border-white/10 relative">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-3 right-3 w-2 h-2 bg-[#00ff00] rounded-full animate-ping" />
+                <span className="absolute top-3 right-3 w-2 h-2 bg-[#7c3aed] rounded-full animate-ping" />
              </button>
              <button className="bg-white/5 px-8 py-4 rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-colors">
                 Exportar CSV
@@ -156,7 +156,7 @@ export default function AdminApp() {
                         key={i} 
                         initial={{ height: 0 }} 
                         animate={{ height: `${h}%` }} 
-                        className="flex-1 bg-gradient-to-t from-[#00ff00]/20 to-[#00ff00]/40 rounded-2xl" 
+                        className="flex-1 bg-gradient-to-t from-[#7c3aed]/20 to-[#ef4444]/40 rounded-2xl" 
                        />
                      ))}
                   </div>
@@ -174,14 +174,14 @@ export default function AdminApp() {
                             <p className="text-[10px] opacity-40"># {order.id}</p>
                           </div>
                         </div>
-                        <span className="text-xs font-black text-[#00ff00]">R$ {(order.total / 100).toFixed(2)}</span>
+                        <span className="text-xs font-black text-[#7c3aed]">R$ {(order.total / 100).toFixed(2)}</span>
                       </div>
                     ))}
                     {orders.filter(o => o.status !== 'COMPLETED').length === 0 && (
                       <div className="flex-1 flex items-center justify-center opacity-20 text-xs font-bold uppercase tracking-widest">Tudo limpo por aqui</div>
                     )}
                   </div>
-                  <button onClick={() => setActiveTab('orders')} className="mt-8 text-center text-[10px] font-black uppercase tracking-widest text-[#00ff00] hover:underline">Ver operação completa</button>
+                  <button onClick={() => setActiveTab('orders')} className="mt-8 text-center text-[10px] font-black uppercase tracking-widest text-[#7c3aed] hover:underline">Ver operação completa</button>
                </div>
             </div>
           </div>
@@ -199,7 +199,7 @@ export default function AdminApp() {
                   <div className="flex gap-8 items-center">
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-2">Pedido</p>
-                      <p className="text-xl font-black text-[#00ff00]">{order.id}</p>
+                      <p className="text-xl font-black text-[#7c3aed]">{order.id}</p>
                     </div>
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-30 mb-2">Cliente</p>
@@ -221,7 +221,7 @@ export default function AdminApp() {
                     </div>
                     <div className="flex gap-3">
                       {order.status === 'PENDING' && (
-                        <button onClick={() => updateOrderStatus(order.id, 'PREPARING')} className="bg-[#00ff00] text-black w-12 h-12 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+                        <button onClick={() => updateOrderStatus(order.id, 'PREPARING')} className="bg-[#7c3aed] text-white w-12 h-12 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
                           <Check className="w-5 h-5" />
                         </button>
                       )}
@@ -252,12 +252,12 @@ export default function AdminApp() {
                  <div className="relative h-48 rounded-[32px] overflow-hidden">
                     <img src={product.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    <span className="absolute bottom-4 left-6 bg-[#00ff00] text-black text-[10px] font-black px-3 py-1 rounded-full">{product.category_name}</span>
+                    <span className="absolute bottom-4 left-6 bg-[#7c3aed] text-white text-[10px] font-black px-3 py-1 rounded-full">{product.category_name}</span>
                  </div>
                  <div className="flex justify-between items-start">
                    <div>
                      <h3 className="font-bold uppercase text-sm tracking-tight">{product.name}</h3>
-                     <p className="text-xl font-black text-[#00ff00] mt-1">R$ {(product.price / 100).toFixed(2)}</p>
+                     <p className="text-xl font-black text-[#7c3aed] mt-1">R$ {(product.price / 100).toFixed(2)}</p>
                    </div>
                    <button className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${product.available ? 'bg-white/5 text-white/20' : 'bg-red-500 text-white'}`}>
                       <Power className="w-4 h-4" />
