@@ -1,87 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Anton&family=Syne:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,900;1,900&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-display: "Anton", sans-serif;
-  --font-heading: "Space Grotesk", sans-serif;
-  --font-syne: "Syne", sans-serif;
-  --primary: #7c3aed;
-  --accent-red: #ef4444;
-  --accent-blue: #3b82f6;
+  --font-display: "Playfair Display", serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --color-paper: #F8F7F4;
+  --color-ink: #1A1A1A;
+  --color-accent: #7c3aed;
+  --color-danger: #ef4444;
 }
 
 @layer base {
   body {
-    @apply bg-[#030014] text-white;
+    @apply bg-[var(--color-paper)] text-[var(--color-ink)] antialiased transition-colors duration-500 selection:bg-[var(--color-accent)] selection:text-white;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-black/10 rounded-full hover:bg-black/20 transition-colors;
   }
 }
 
 @layer utilities {
-  .text-glow {
-    text-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
-  }
-  
   .gpu {
     backface-visibility: hidden;
     transform: translateZ(0);
     will-change: transform, opacity;
   }
 
-  .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
-  }
-  
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .atmos-bg {
-    background: 
-      radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, #030014 100%);
+  /* Glass Effects */
+  .glass-light {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(0, 0, 0, 0.04);
   }
 
-  .kerning-tight {
-    letter-spacing: -0.05em;
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.02);
   }
-  
-  .kerning-wide {
-    letter-spacing: 0.2em;
+
+  .text-high-contrast {
+    color: var(--color-ink);
+    letter-spacing: -0.015em;
+  }
+
+  .title-massive {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    line-height: 0.85;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+
+  .meta-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
   }
 }
 
-/* Atmospheric Grain */
-.grain::after {
-  content: "";
+/* Film Grain - Subtle */
+.grain-overlay {
   position: fixed;
-  top: -150%;
-  left: -150%;
-  width: 300%;
-  height: 300%;
+  inset: 0;
   background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity: 0.04;
+  opacity: 0.025;
   pointer-events: none;
-  z-index: 100;
-  animation: grain 8s steps(10) infinite;
-}
-
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  20% { transform: translate(-15%, 5%); }
-  30% { transform: translate(7%, -25%); }
-  40% { transform: translate(-5%, 25%); }
-  50% { transform: translate(-15%, 10%); }
-  60% { transform: translate(15%, 0%); }
-  70% { transform: translate(0%, 15%); }
-  80% { transform: translate(3%, 35%); }
-  90% { transform: translate(-10%, 10%); }
+  z-index: 9999;
 }

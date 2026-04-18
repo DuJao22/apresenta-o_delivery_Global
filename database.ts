@@ -1,12 +1,18 @@
 import Database from 'better-sqlite3';
 
-const db = new Database('delivery.db');
+let db: any;
+
+try {
+  db = new Database('delivery.db');
+  db.pragma('journal_mode = WAL');
+} catch (error) {
+  console.warn("Could not create persistent database file, falling back to in-memory database.");
+  db = new Database(':memory:');
+}
 
 export function initDb() {
-  // Use WAL mode for better performance
-  db.pragma('journal_mode = WAL');
-
-  db.exec(`
+  try {
+    db.exec(`
     CREATE TABLE IF NOT EXISTS tenants (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -120,6 +126,9 @@ export function initDb() {
   
   const updateStmt = db.prepare('UPDATE products SET image_url = ? WHERE id = ?');
   updatePromises.forEach(p => updateStmt.run(p.img, p.id));
+  } catch (error) {
+    console.error("Error during database initialization:", error);
+  }
 }
 
 export default db;

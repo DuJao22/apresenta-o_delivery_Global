@@ -14,118 +14,132 @@ const CINEMATIC_IMAGES = [
   "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1920&q=80"
 ];
 
-const CinematicBackground = () => {
+const CinematicBackground = memo(() => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % CINEMATIC_IMAGES.length);
-    }, 10000);
+    }, 12000);
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[var(--paper)]">
       <AnimatePresence mode="wait">
         <motion.div
           key={index}
-          initial={{ opacity: 0, scale: 1.15, rotate: 2 }}
-          animate={{ opacity: 0.5, scale: 1, rotate: 0 }}
-          exit={{ opacity: 0, scale: 0.9, rotate: -2 }}
-          transition={{ duration: 4, ease: [0.4, 0, 0.2, 1] }}
+          initial={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
+          animate={{ opacity: 0.15, scale: 1, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+          transition={{ duration: 5, ease: [0.23, 1, 0.32, 1] }}
           className="absolute inset-0"
         >
           <img 
             src={CINEMATIC_IMAGES[index]} 
-            alt="Cinematic Background" 
-            className="w-full h-full object-cover grayscale-[0.3] brightness-[0.4]"
+            alt="Background" 
+            className="w-full h-full object-cover grayscale-[0.5] contrast-[1.1]"
             referrerPolicy="no-referrer"
           />
         </motion.div>
       </AnimatePresence>
       
-      {/* Dynamic Overlays for Cinematic Feel */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+      {/* Light Overlay for Professional Contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[var(--paper)]/80 via-transparent to-[var(--paper)]/95" />
       
-      {/* Moving Light Streaks */}
+      {/* Moving Professional Accents */}
       <motion.div 
-        animate={{ 
-          x: ['-200%', '200%'],
-          opacity: [0, 0.15, 0]
-        }}
-        transition={{ 
-          duration: 15, 
-          repeat: Infinity,
-          ease: "linear"
-        }}
-        className="absolute top-1/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent shadow-[0_0_40px_rgba(124,58,237,0.5)] rotate-[-15deg]"
+        animate={{ x: ['-100%', '100%'], opacity: [0, 0.05, 0] }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        className="absolute top-1/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent rotate-[-15deg]"
       />
-      <motion.div 
-        animate={{ 
-          x: ['200%', '-200%'],
-          opacity: [0, 0.1, 0]
-        }}
-        transition={{ 
-          duration: 12, 
-          repeat: Infinity,
-          ease: "linear"
-        }}
-        className="absolute bottom-1/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#ef4444] to-transparent shadow-[0_0_30px_rgba(239,68,68,0.4)] rotate-[10deg]"
-      />
-
-      {/* Floating Particles (Anime Style Motes) */}
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ 
-            x: Math.random() * 100 + '%', 
-            y: Math.random() * 100 + '%',
-            opacity: 0 
-          }}
-          animate={{ 
-            y: ['0%', '100%'],
-            x: [Math.random() * 100 + '%', Math.random() * 100 + '%'],
-            opacity: [0, 0.3, 0]
-          }}
-          transition={{ 
-            duration: 15 + Math.random() * 10,
-            repeat: Infinity,
-            delay: Math.random() * 10
-          }}
-          className="absolute w-1 h-1 bg-white rounded-full blur-[1px] shadow-[0_0_8px_white]"
-        />
-      ))}
-      {/* Film Grain Overlay */}
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </div>
   );
-};
+});
+
+const ScrollHint = memo(() => (
+  <motion.div 
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 2, duration: 1 }}
+    className="absolute bottom-32 left-0 right-0 flex flex-col items-center justify-center gap-2 z-10 pointer-events-none"
+  >
+    <span className="meta-label text-[color:var(--accent)] !opacity-100">Explore o Cardápio</span>
+    <motion.div
+      animate={{ y: [0, 8, 0] }}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <ChevronRight className="w-5 h-5 rotate-90 text-[color:var(--accent)]" />
+    </motion.div>
+  </motion.div>
+));
+
+const SplashScreen = memo(({ onComplete }: { onComplete: () => void }) => {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 3000);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-[var(--paper)] flex flex-col items-center justify-center p-8"
+    >
+      <div className="relative">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0, letterSpacing: '0.5em' }}
+          animate={{ scale: 1, opacity: 1, letterSpacing: '-0.02em' }}
+          transition={{ duration: 2, ease: [0.23, 1, 0.32, 1] }}
+          className="title-massive text-[color:var(--accent)] text-center mb-2"
+        >
+          GLOBAL<br />BURGER
+        </motion.div>
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: '100%' }}
+          transition={{ duration: 1.5, delay: 0.5, ease: [0.23, 1, 0.32, 1] }}
+          className="h-[1px] bg-[color:var(--accent)] mb-4"
+        />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.5 }}
+          transition={{ duration: 1, delay: 1.5 }}
+          className="meta-label text-center"
+        >
+          Experiência Gastronômica Premium
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+});
 
 const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: any) => void }) => (
   <motion.div 
     variants={{
-      hidden: { opacity: 0, y: 20, scale: 0.95 },
+      hidden: { opacity: 0, y: 30, scale: 0.98 },
       show: { opacity: 1, y: 0, scale: 1 }
     }}
-    className="bg-white/10 backdrop-blur-md rounded-[32px] overflow-hidden border border-white/10 hover:border-[#7c3aed]/50 transition-all group flex flex-col gpu"
+    transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+    className="glass-card rounded-[40px] overflow-hidden group flex flex-col gpu hover:shadow-2xl transition-all duration-500"
   >
-    <div className="relative aspect-square overflow-hidden">
+    <div className="relative aspect-[4/3] overflow-hidden">
       <img 
         src={product.image_url} 
         alt={product.name} 
         loading="lazy"
-        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] ease-out mt-1" 
       />
-      <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-        <span className="text-xs font-black text-[#7c3aed]">R$ {(product.price / 100).toFixed(2)}</span>
+      <div className="absolute top-6 right-6 glass-light px-4 py-2 rounded-full border border-black/5 shadow-sm">
+        <span className="text-xs font-black text-[color:var(--accent)]">R$ {(product.price / 100).toFixed(2)}</span>
       </div>
     </div>
     
-    <div className="p-6 flex flex-col flex-1">
-      <div className="flex-1 mb-6">
-        <h3 className="font-display text-xl uppercase tracking-tighter mb-2">{product.name}</h3>
-        <p className="text-xs opacity-40 leading-relaxed font-light">{product.description}</p>
+    <div className="p-8 flex flex-col flex-1">
+      <div className="flex-1 mb-8">
+        <h3 className="font-display text-2xl tracking-tighter mb-3 text-high-contrast">{product.name}</h3>
+        <p className="text-xs opacity-60 leading-relaxed font-normal text-high-contrast">{product.description}</p>
       </div>
       
       <button 
@@ -133,9 +147,9 @@ const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: a
           e.stopPropagation();
           onSelect(product);
         }}
-        className="w-full bg-white text-black py-4 rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-[#7c3aed] hover:text-white transition-colors"
+        className="w-full bg-[color:var(--ink)] text-white py-5 rounded-[24px] font-black uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-[color:var(--accent)] active:scale-95 transition-all duration-300"
       >
-        <Plus className="w-4 h-4" /> ADICIONAR AO CARRINHO
+        <Plus className="w-4 h-4" /> ADICIONAR AO PEDIDO
       </button>
     </div>
   </motion.div>
@@ -146,6 +160,7 @@ export default function CustomerApp() {
   const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
@@ -268,20 +283,33 @@ export default function CustomerApp() {
     return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
   };
 
-  if (loading) return <div className="p-8 text-center text-white/50 uppercase tracking-widest text-xs h-screen flex items-center justify-center">Carregando Cardápio...</div>;
+  if (loading || showSplash) {
+    return (
+      <AnimatePresence>
+        {showSplash ? (
+          <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />
+        ) : (
+          <div className="p-8 text-center text-ink/50 uppercase tracking-widest text-xs h-screen flex flex-col items-center justify-center bg-[var(--paper)]">
+            <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin mb-4" />
+            Carregando Cardápio...
+          </div>
+        )}
+      </AnimatePresence>
+    );
+  }
 
   if (error) return (
-    <div className="p-10 text-center text-white space-y-6 h-screen flex flex-col items-center justify-center bg-black">
-      <div className="w-16 h-16 bg-[#ef4444]/20 rounded-full flex items-center justify-center text-[#ef4444] mb-4">
-        <Info className="w-8 h-8" />
+    <div className="p-10 text-center text-ink space-y-8 h-screen flex flex-col items-center justify-center bg-[var(--paper)]">
+      <div className="w-20 h-20 bg-[var(--danger)]/10 rounded-full flex items-center justify-center text-[var(--danger)] mb-4">
+        <Info className="w-10 h-10" />
       </div>
-      <h2 className="text-xl font-black uppercase tracking-tighter">Erro de Conexão</h2>
-      <p className="text-[10px] opacity-60 uppercase tracking-widest text-center px-4 leading-relaxed">
+      <h2 className="title-massive text-4xl !leading-tight uppercase tracking-tighter">ERRO DE CONEXÃO</h2>
+      <p className="text-[10px] opacity-60 uppercase tracking-widest text-center px-4 leading-relaxed max-w-xs mx-auto">
         {error}
       </p>
       <button 
         onClick={loadMenu}
-        className="px-8 py-4 bg-[#7c3aed] text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg active:scale-95 transition-all"
+        className="px-10 py-5 bg-[var(--accent)] text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-2xl active:scale-95 transition-all"
       >
         Tentar Novamente
       </button>
@@ -289,44 +317,48 @@ export default function CustomerApp() {
   );
 
   return (
-    <div className="min-h-screen bg-black/40 text-white font-sans max-w-md mx-auto relative shadow-2xl overflow-hidden flex flex-col backdrop-blur-[2px]">
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-sans max-w-md mx-auto relative shadow-[0_0_100px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col grain-overlay">
       <CinematicBackground />
       
+      {/* Scroll Signal */}
+      {activeView === 'menu' && !searchQuery && <ScrollHint />}
+
       {/* Dynamic Header */}
-      <header className="p-6 pb-2 relative z-10">
-        <div className="flex justify-between items-start mb-6">
+      <header className="p-8 pb-4 relative z-10">
+        <div className="flex justify-between items-center mb-10">
           <div onClick={() => setActiveView('menu')} className="cursor-pointer">
-            <h1 className="text-2xl font-black uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(124,58,237,0.5)]">Global Burger</h1>
-            <p className="text-[10px] uppercase tracking-widest opacity-50 flex items-center gap-1">
-              <Clock className="w-3 h-3" /> 20-35 min • $ 5.00
+            <h1 className="title-massive text-3xl uppercase tracking-tighter text-high-contrast">Global Burger</h1>
+            <p className="meta-label flex items-center gap-2 mt-1">
+              <Clock className="w-3 h-3 text-[color:var(--accent)]" /> 20-35 min • Entrega Grátis
             </p>
           </div>
           {activeView === 'menu' && (
-            <div className="relative">
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 group-focus-within:text-[color:var(--accent)] group-focus-within:opacity-100 transition-all" />
               <input 
                 type="text" 
                 placeholder="Buscar..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs outline-none w-32 focus:w-48 transition-all focus:border-[#7c3aed]"
+                className="bg-black/5 rounded-2xl pl-10 pr-4 py-3 text-sm outline-none w-10 focus:w-44 transition-all duration-700 ease-[0.23, 1, 0.32, 1] focus:bg-white focus:shadow-xl"
               />
             </div>
           )}
           {activeView !== 'menu' && (
-            <button onClick={() => setActiveView('menu')} className="bg-white/10 p-2 rounded-full">
-              <ArrowLeft className="w-5 h-5" />
+            <button onClick={() => setActiveView('menu')} className="bg-white/50 backdrop-blur-md p-3 rounded-2xl shadow-sm border border-black/5 active:scale-90 transition-all">
+              <ArrowLeft className="w-5 h-5 text-high-contrast" />
             </button>
           )}
         </div>
 
         {activeView === 'menu' && (
-          <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+          <div className="flex gap-3 overflow-x-auto pb-6 no-scrollbar">
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => { setActiveCategory(cat.id); setSearchQuery(''); }}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold uppercase transition-all ${
-                  activeCategory === cat.id && !searchQuery ? 'bg-[#ef4444] text-white shadow-[0_5px_15px_rgba(239,68,68,0.3)]' : 'bg-white/10 text-white/60'
+                className={`flex-shrink-0 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                  activeCategory === cat.id && !searchQuery ? 'bg-[var(--accent)] text-white shadow-xl translate-y-[-2px]' : 'bg-white/50 text-ink/40 border border-black/5'
                 }`}
               >
                 {cat.name}
@@ -337,7 +369,7 @@ export default function CustomerApp() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto px-6 pb-32 no-scrollbar relative z-10">
+      <main className="flex-1 overflow-y-auto px-8 pb-32 no-scrollbar relative z-10 mt-2">
         <AnimatePresence mode="wait">
           {activeView === 'menu' && (
             <motion.div
@@ -346,16 +378,19 @@ export default function CustomerApp() {
                 hidden: { opacity: 0 },
                 show: {
                   opacity: 1,
-                  transition: { staggerChildren: 0.1 }
+                  transition: { staggerChildren: 0.15, delayChildren: 0.1 }
                 }
               }}
               initial="hidden"
               animate="show"
-              exit={{ opacity: 0, transition: { duration: 0.2 } }}
-              className="space-y-4"
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-6"
             >
               {filteredProducts.length === 0 ? (
-                <div className="text-center py-20 opacity-30 text-xs uppercase font-bold tracking-widest">Nenhum item encontrado</div>
+                <div className="text-center py-20 meta-label flex flex-col items-center gap-4">
+                  <span className="text-4xl">🍴</span>
+                  Nenhum item encontrado
+                </div>
               ) : (
                 filteredProducts.map(product => (
                   <ProductCard key={product.id} product={product} onSelect={setSelectedProduct} />
@@ -365,31 +400,31 @@ export default function CustomerApp() {
           )}
 
           {activeView === 'cart' && (
-            <motion.div key="cart" className="space-y-4 pt-4">
-              <h2 className="text-xl font-bold uppercase tracking-tight mb-4">Seu Carrinho</h2>
+            <motion.div key="cart" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pt-4">
+              <h2 className="title-massive text-3xl uppercase text-high-contrast mb-6">Seu Pedido</h2>
               {cart.items.length === 0 ? (
-                <div className="text-center py-20">
-                  <ShoppingBag className="w-12 h-12 mx-auto opacity-10 mb-4" />
-                  <p className="opacity-40 uppercase text-[10px] font-bold tracking-widest">Carrinho vazio</p>
+                <div className="text-center py-24 glass-card rounded-[40px]">
+                  <ShoppingBag className="w-16 h-16 mx-auto opacity-10 mb-6" />
+                  <p className="meta-label">Seu carrinho está vazio</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {cart.items.map(item => (
-                    <div key={item.id} className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h4 className="text-sm font-bold uppercase">{item.name}</h4>
-                          {item.selectedOptions.map(opt => (
-                            <span key={opt.id} className="text-[10px] text-[#7c3aed] block">+ {opt.name}</span>
-                          ))}
+                    <div key={item.id} className="glass-card p-6 rounded-[32px] flex items-center justify-between gap-4">
+                      <div className="flex-1">
+                        <h4 className="text-sm font-black uppercase text-high-contrast">{item.name}</h4>
+                        {item.selectedOptions.map(opt => (
+                          <span key={opt.id} className="text-[10px] text-[color:var(--accent)] font-bold block mt-1">+ {opt.name}</span>
+                        ))}
+                        <div className="flex items-center gap-4 mt-4">
+                          <div className="flex items-center bg-black/5 rounded-full p-1">
+                            <button onClick={() => cart.updateQuantity(item.id, item.quantity - 1)} className="p-2 hover:bg-white rounded-full transition-colors"><Minus className="w-3 h-3" /></button>
+                            <span className="text-xs font-black w-8 text-center">{item.quantity}</span>
+                            <button onClick={() => cart.updateQuantity(item.id, item.quantity + 1)} className="p-2 hover:bg-white rounded-full transition-colors"><Plus className="w-3 h-3" /></button>
+                          </div>
                         </div>
-                        <span className="text-sm font-black text-[#7c3aed]">R$ {(item.price * item.quantity / 100).toFixed(2)}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <button onClick={() => cart.updateQuantity(item.id, item.quantity - 1)} className="p-1 bg-white/10 rounded-full"><Minus className="w-3 h-3" /></button>
-                        <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
-                        <button onClick={() => cart.updateQuantity(item.id, item.quantity + 1)} className="p-1 bg-white/10 rounded-full"><Plus className="w-3 h-3" /></button>
-                      </div>
+                      <span className="text-sm font-black text-[color:var(--accent)] whitespace-nowrap">R$ {(item.price * item.quantity / 100).toFixed(2)}</span>
                     </div>
                   ))}
                 </div>
@@ -398,138 +433,146 @@ export default function CustomerApp() {
           )}
 
           {activeView === 'checkout' && (
-            <motion.div key="checkout" className="space-y-6 pt-4">
+            <motion.div key="checkout" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 pt-4">
                {checkoutStep === 1 && (
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                   <h3 className="text-xl font-bold uppercase">1. Entrega</h3>
-                   <div className="space-y-3">
-                     <input 
-                      type="text" 
-                      placeholder="CEP" 
-                      maxLength={8}
-                      value={address.cep}
-                      onChange={(e) => handleCEPChange(e.target.value)}
-                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none focus:border-[#7c3aed]" 
-                     />
-                     <input 
-                      type="text" 
-                      placeholder="Rua / Logradouro" 
-                      value={address.street}
-                      onChange={(e) => setAddress({...address, street: e.target.value})}
-                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none focus:border-[#7c3aed]" 
-                     />
-                     <div className="grid grid-cols-2 gap-3">
+                 <div className="space-y-6">
+                   <h3 className="title-massive text-2xl uppercase text-high-contrast">1. ENTREGA</h3>
+                   <div className="space-y-4">
+                     <div className="glass-card p-2 rounded-[24px]">
                        <input 
                         type="text" 
-                        placeholder="Número" 
-                        value={address.number}
-                        onChange={(e) => setAddress({...address, number: e.target.value})}
-                        className="bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none" 
-                       />
-                       <input 
-                        type="text" 
-                        placeholder="Ap / Bloco" 
-                        value={address.complement}
-                        onChange={(e) => setAddress({...address, complement: e.target.value})}
-                        className="bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none" 
+                        placeholder="CEP (Somente números)" 
+                        maxLength={8}
+                        value={address.cep}
+                        onChange={(e) => handleCEPChange(e.target.value)}
+                        className="w-full bg-transparent p-4 text-sm font-bold placeholder:text-ink/20 outline-none" 
                        />
                      </div>
+                     <div className="glass-card p-2 rounded-[24px]">
+                       <input 
+                        type="text" 
+                        placeholder="Endereço Completo" 
+                        value={address.street}
+                        onChange={(e) => setAddress({...address, street: e.target.value})}
+                        className="w-full bg-transparent p-4 text-sm font-bold placeholder:text-ink/20 outline-none" 
+                       />
+                     </div>
+                     <div className="grid grid-cols-2 gap-4">
+                       <div className="glass-card p-2 rounded-[24px]">
+                         <input 
+                          type="text" 
+                          placeholder="Número" 
+                          value={address.number}
+                          onChange={(e) => setAddress({...address, number: e.target.value})}
+                          className="w-full bg-transparent p-4 text-sm font-bold placeholder:text-ink/20 outline-none" 
+                         />
+                       </div>
+                       <div className="glass-card p-2 rounded-[24px]">
+                         <input 
+                          type="text" 
+                          placeholder="Ap / Bloco" 
+                          value={address.complement}
+                          onChange={(e) => setAddress({...address, complement: e.target.value})}
+                          className="w-full bg-transparent p-4 text-sm font-bold placeholder:text-ink/20 outline-none" 
+                         />
+                       </div>
+                     </div>
                    </div>
-                 </motion.div>
+                 </div>
                )}
 
                {checkoutStep === 2 && (
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                   <h3 className="text-xl font-bold uppercase">2. Identificação</h3>
-                   <div className="space-y-3">
-                     <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center gap-3">
-                       <User className="w-5 h-5 opacity-40" />
+                 <div className="space-y-6">
+                   <h3 className="title-massive text-2xl uppercase">2. IDENTIFICAÇÃO</h3>
+                   <div className="space-y-4">
+                     <div className="glass-card p-2 rounded-[24px] flex items-center px-4">
+                       <User className="w-5 h-5 opacity-20" />
                        <input 
                         type="text" 
-                        placeholder="Seu Nome" 
+                        placeholder="Seu Nome Completo" 
                         value={customer.name}
                         onChange={(e) => setCustomer({...customer, name: e.target.value})}
-                        className="bg-transparent text-sm outline-none flex-1" 
+                        className="bg-transparent p-4 text-sm outline-none flex-1 font-bold" 
                        />
                      </div>
-                     <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center gap-3">
-                       <Clock className="w-5 h-5 opacity-40" />
+                     <div className="glass-card p-2 rounded-[24px] flex items-center px-4">
+                       <Clock className="w-5 h-5 opacity-20" />
                        <input 
                         type="tel" 
                         placeholder="Telefone (WhatsApp)" 
                         value={customer.phone}
                         onChange={(e) => setCustomer({...customer, phone: e.target.value})}
-                        className="bg-transparent text-sm outline-none flex-1" 
+                        className="bg-transparent p-4 text-sm outline-none flex-1 font-bold" 
                        />
                      </div>
                    </div>
-                 </motion.div>
+                 </div>
                )}
 
                {checkoutStep === 3 && (
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                   <h3 className="text-xl font-bold uppercase">3. Pagamento</h3>
-                   <div className="grid grid-cols-1 gap-3">
+                 <div className="space-y-6">
+                   <h3 className="title-massive text-2xl uppercase">3. PAGAMENTO</h3>
+                   <div className="grid grid-cols-1 gap-4">
                     {[
-                      { id: 'PIX', label: 'PIX (Automático)', icon: CheckCircle2 },
-                      { id: 'CARD', label: 'Cartão (Entregador)', icon: CreditCard },
+                      { id: 'PIX', label: 'PIX (Pagamento Instantâneo)', icon: CheckCircle2 },
+                      { id: 'CARD', label: 'Cartão (Na Entrega)', icon: CreditCard },
                       { id: 'CASH', label: 'Dinheiro', icon: Banknote },
                     ].map(method => (
                       <button 
                         key={method.id}
                         onClick={() => setPayment({...payment, method: method.id})}
-                        className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
-                          payment.method === method.id ? 'bg-[#7c3aed] border-[#7c3aed] text-white font-bold' : 'bg-white/5 border-white/10'
+                        className={`flex items-center gap-5 p-6 rounded-[32px] border transition-all duration-500 scale-in ${
+                          payment.method === method.id ? 'bg-[var(--accent)] border-[var(--accent)] text-white shadow-2xl scale-[1.02]' : 'glass-card'
                         }`}
                       >
-                        <method.icon className="w-5 h-5" />
-                        <span className="text-xs uppercase tracking-widest">{method.label}</span>
+                        <method.icon className="w-6 h-6" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">{method.label}</span>
                       </button>
                     ))}
                    </div>
-                   {payment.method === 'CASH' && (
-                     <motion.input 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      type="text" 
-                      placeholder="Troco para quanto?" 
-                      className="w-full bg-white/5 p-4 rounded-2xl border border-white/10 text-sm outline-none" 
-                     />
-                   )}
-                 </motion.div>
+                 </div>
                )}
             </motion.div>
           )}
 
           {activeView === 'success' && (
-            <motion.div key="success" className="text-center py-10 space-y-6">
+            <motion.div key="success" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center py-12 space-y-10">
               <div className="relative inline-block">
-                <CheckCircle2 className="w-24 h-24 text-[#7c3aed] mx-auto" />
+                <CheckCircle2 className="w-32 h-32 text-[var(--accent)] mx-auto" />
                 <motion.div 
-                  initial={{ scale: 0 }} animate={{ scale: 1.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 2 }}
-                  className="absolute inset-0 border-4 border-[#7c3aed] rounded-full"
+                  initial={{ scale: 0.8, opacity: 0.5 }} 
+                  animate={{ scale: 1.5, opacity: 0 }} 
+                  transition={{ repeat: Infinity, duration: 2.5, ease: "easeOut" }}
+                  className="absolute inset-0 border-2 border-[var(--accent)] rounded-full"
                 />
               </div>
-              <h2 className="text-3xl font-black uppercase text-[#7c3aed]">Sucesso!</h2>
-              <div className="bg-white/5 p-6 rounded-3xl border border-white/10 space-y-2 text-left">
-                <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Status do Pedido</p>
-                <div className="flex items-center gap-3">
-                   <div className="w-2 h-2 rounded-full bg-[#7c3aed] animate-pulse" />
-                   <p className="text-sm font-bold">PREPARANDO NA COZINHA</p>
-                </div>
-                <p className="text-xs opacity-60">Seu Delivery Global chegará em aproximadamente 30 minutos.</p>
+              <div className="space-y-4">
+                <h2 className="title-massive text-5xl uppercase text-[var(--accent)]">Pedido Enviado!</h2>
+                <p className="meta-label">Agora é só aguardar a nossa equipe</p>
               </div>
-              <div className="space-y-3">
+
+              <div className="glass-card p-10 rounded-[40px] border border-[var(--accent)]/10 text-left space-y-6 shadow-2xl">
+                 <div className="flex justify-between items-center bg-[var(--accent)]/5 p-4 rounded-2xl">
+                    <div className="w-3 h-3 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_10px_var(--accent)]" />
+                    <p className="text-xs font-black uppercase tracking-widest text-[var(--accent)]">Preparando na Cozinha</p>
+                 </div>
+                 <div className="space-y-2">
+                    <p className="text-xl font-display font-black tracking-tight">Tempo Estimado: 35 min</p>
+                    <p className="text-xs opacity-50 uppercase tracking-widest font-bold">Seu pedido chegará quentinho!</p>
+                 </div>
+              </div>
+
+              <div className="space-y-4">
                 <a 
                   href={getWhatsAppLink()}
                   target="_blank"
-                  className="w-full bg-[#25D366] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg"
+                  className="w-full bg-[#25D366] text-white p-6 rounded-[24px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl hover:shadow-[#25D366]/20 transition-all active:scale-95"
                 >
-                  Confirmar via WhatsApp
+                  Confirmar no WhatsApp
                 </a>
                 <button 
                   onClick={() => setActiveView('menu')}
-                  className="w-full bg-white/5 text-white/50 p-4 rounded-2xl font-bold uppercase text-[10px] tracking-widest"
+                  className="w-full bg-black/5 text-ink/40 p-6 rounded-[24px] font-black uppercase text-[10px] tracking-widest hover:bg-black/10 transition-all"
                 >
                   Voltar ao Cardápio
                 </button>
@@ -541,31 +584,31 @@ export default function CustomerApp() {
 
       {/* Floating Bottom Navigation */}
       {activeView !== 'success' && (
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent z-20">
+        <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-[var(--paper)] via-[var(--paper)]/90 to-transparent z-20">
           {activeView === 'menu' && (
             <button 
               onClick={() => setActiveView('cart')}
-              className="w-full bg-[#7c3aed] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex justify-between items-center shadow-[0_10px_30px_rgba(124,58,237,0.3)] active:scale-95 transition-all"
+              className="w-full bg-[var(--ink)] text-white p-6 rounded-[28px] font-black uppercase tracking-widest flex justify-between items-center shadow-2xl active:scale-95 transition-all duration-300"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div className="relative">
                   <ShoppingBag className="w-5 h-5" />
                   {cart.items.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-black text-[#7c3aed] text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center">{cart.items.length}</span>
+                    <span className="absolute -top-3 -right-3 bg-[var(--accent)] text-white text-[8px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">{cart.items.length}</span>
                   )}
                 </div>
-                <span className="text-xs">VER CARRINHO</span>
+                <span className="text-[10px] tracking-[0.2em]">Ver Pedido</span>
               </div>
-              <span className="text-sm">R$ {(cart.total() / 100).toFixed(2)}</span>
+              <span className="text-sm font-black text-[var(--paper)]/90">R$ {(cart.total() / 100).toFixed(2)}</span>
             </button>
           )}
           {activeView === 'cart' && (
             <button 
               disabled={cart.items.length === 0}
               onClick={() => setActiveView('checkout')}
-              className="w-full bg-[#7c3aed] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex justify-between items-center shadow-[0_10px_30px_rgba(124,58,237,0.3)] disabled:opacity-50 disabled:grayscale transition-all"
+              className="w-full bg-[var(--accent)] text-white p-6 rounded-[28px] font-black uppercase tracking-widest flex justify-between items-center shadow-2xl shadow-[var(--accent)]/30 disabled:opacity-50 disabled:grayscale transition-all duration-300"
             >
-              <span className="text-xs">IR PARA PAGAMENTO</span>
+              <span className="text-[10px] tracking-[0.2em]">Próximo Passo</span>
               <ChevronRight className="w-5 h-5" />
             </button>
           )}
@@ -574,7 +617,7 @@ export default function CustomerApp() {
               {checkoutStep > 1 && (
                 <button 
                   onClick={() => setCheckoutStep(prev => prev - 1)}
-                  className="bg-white/10 p-4 rounded-2xl text-white outline-none"
+                  className="glass-card p-6 rounded-[24px] text-ink outline-none"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
@@ -584,9 +627,9 @@ export default function CustomerApp() {
                   if (checkoutStep < 3) setCheckoutStep(prev => prev + 1);
                   else finalizeOrder();
                 }}
-                className="flex-1 bg-[#7c3aed] text-white p-4 rounded-2xl font-black uppercase tracking-widest flex justify-center items-center gap-2 shadow-[0_10px_30px_rgba(124,58,237,0.3)]"
+                className="flex-1 bg-[var(--accent)] text-white p-6 rounded-[28px] font-black uppercase tracking-widest flex justify-center items-center gap-3 shadow-2xl shadow-[var(--accent)]/30"
               >
-                <span>{checkoutStep < 3 ? 'CONTINUAR' : 'CONCLUIR PEDIDO'}</span>
+                <span className="text-[10px] tracking-[0.2em]">{checkoutStep < 3 ? 'Continuar' : 'Finalizar agora'}</span>
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
@@ -601,29 +644,30 @@ export default function CustomerApp() {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-md p-4"
           >
             <motion.div 
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
-              className="bg-[#111] max-w-md w-full rounded-t-[40px] px-6 pt-8 pb-10 border-t border-white/10"
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="bg-[var(--paper)] max-w-md w-full rounded-t-[50px] px-8 pt-10 pb-12 shadow-[0_-20px_50px_rgba(0,0,0,0.1)] border-t border-black/5"
             >
-              <div className="flex justify-between items-start mb-6">
+              <div className="flex justify-between items-start mb-10">
                 <div>
-                  <h3 className="text-xl font-black uppercase tracking-tight">{selectedProduct.name}</h3>
-                  <p className="text-xs opacity-50 mt-1">{selectedProduct.description}</p>
+                  <h3 className="title-massive text-3xl text-high-contrast">{selectedProduct.name}</h3>
+                  <p className="text-xs opacity-50 font-normal mt-2 leading-relaxed">{selectedProduct.description}</p>
                 </div>
-                <button onClick={() => setSelectedProduct(null)} className="p-2 bg-white/5 rounded-full"><X className="w-5 h-5" /></button>
+                <button onClick={() => setSelectedProduct(null)} className="p-3 bg-black/5 rounded-2xl hover:bg-black/10 transition-colors"><X className="w-5 h-5" /></button>
               </div>
 
-              <div className="space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar pb-6">
+              <div className="space-y-8 max-h-[50vh] overflow-y-auto no-scrollbar pb-10">
                 <div>
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40">Adicionais</h4>
-                    <span className="bg-white/5 px-3 py-1 rounded-full text-[9px] font-bold">OPCIONAL</span>
+                  <div className="flex justify-between items-center mb-6">
+                    <h4 className="meta-label">Adicionais Premium</h4>
+                    <span className="bg-[var(--accent)]/5 px-3 py-1 rounded-full text-[8px] font-black text-[var(--accent)]">OPCIONAL</span>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {selectedProduct.options?.map((opt: any) => (
                       <button 
                         key={opt.id}
@@ -634,17 +678,17 @@ export default function CustomerApp() {
                             setSelectedOptions([...selectedOptions, opt]);
                           }
                         }}
-                        className={`w-full flex justify-between items-center p-4 rounded-2xl border transition-all ${
-                          selectedOptions.find(o => o.id === opt.id) ? 'bg-[#7c3aed]/10 border-[#7c3aed]' : 'bg-white/5 border-white/5'
+                        className={`w-full flex justify-between items-center p-5 rounded-[24px] border transition-all duration-500 ${
+                          selectedOptions.find(o => o.id === opt.id) ? 'bg-[var(--accent)]/5 border-[var(--accent)] shadow-sm' : 'glass-card'
                         }`}
                       >
-                        <span className="text-xs font-bold uppercase">{opt.name}</span>
-                        <div className="flex items-center gap-2">
-                           <span className="text-[10px] opacity-60">+ R$ {(opt.price / 100).toFixed(2)}</span>
-                           <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                             selectedOptions.find(o => o.id === opt.id) ? 'bg-[#7c3aed] border-[#7c3aed] text-white' : 'border-white/20'
+                        <span className="text-xs font-bold uppercase tracking-tight">{opt.name}</span>
+                        <div className="flex items-center gap-3">
+                           <span className="text-[10px] font-black opacity-40">+ R$ {(opt.price / 100).toFixed(2)}</span>
+                           <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+                             selectedOptions.find(o => o.id === opt.id) ? 'bg-[var(--accent)] border-[var(--accent)] text-white scale-110' : 'border-black/10'
                            }`}>
-                             {selectedOptions.find(o => o.id === opt.id) && <CheckCircle2 className="w-3 h-3" />}
+                             {selectedOptions.find(o => o.id === opt.id) && <CheckCircle2 className="w-3.5 h-3.5" />}
                            </div>
                         </div>
                       </button>
@@ -652,14 +696,14 @@ export default function CustomerApp() {
                   </div>
                 </div>
 
-                {/* Retirar Ingredientes (Mock Section for "removing ingredients") */}
+                {/* Retirar Ingredientes */}
                 <div>
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40">Retirar Ingredientes</h4>
-                    <span className="bg-white/5 px-3 py-1 rounded-full text-[9px] font-bold">OPCIONAL</span>
+                  <div className="flex justify-between items-center mb-6">
+                    <h4 className="meta-label">Preferências</h4>
+                    <span className="bg-black/5 px-3 py-1 rounded-full text-[8px] font-black opacity-50">SEM CUSTO</span>
                   </div>
-                  <div className="space-y-3">
-                    {["Cebola", "Tomate", "Alface", "Maionese"].map((ing) => (
+                  <div className="grid grid-cols-2 gap-4">
+                    {["Cebola", "Tomate", "Alface", "Ketchup"].map((ing) => (
                       <button 
                         key={ing}
                         onClick={() => {
@@ -670,13 +714,13 @@ export default function CustomerApp() {
                             setSelectedOptions([...selectedOptions, opt]);
                           }
                         }}
-                        className={`w-full flex justify-between items-center p-4 rounded-2xl border transition-all ${
-                          selectedOptions.find(o => o.id === `remove-${ing}`) ? 'bg-[#ff4444]/10 border-[#ff4444]' : 'bg-white/5 border-white/5'
+                        className={`flex justify-between items-center p-4 rounded-[20px] border transition-all duration-500 ${
+                          selectedOptions.find(o => o.id === `remove-${ing}`) ? 'bg-[var(--danger)]/5 border-[var(--danger)]/30 scale-95 opacity-60' : 'glass-card'
                         }`}
                       >
-                        <span className="text-xs font-bold uppercase">{ing}</span>
-                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                          selectedOptions.find(o => o.id === `remove-${ing}`) ? 'bg-[#ff4444] border-[#ff4444] text-white' : 'border-white/20'
+                        <span className="text-[10px] font-bold uppercase">{ing}</span>
+                        <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                          selectedOptions.find(o => o.id === `remove-${ing}`) ? 'bg-[var(--danger)] border-[var(--danger)] text-white' : 'border-black/5'
                         }`}>
                           {selectedOptions.find(o => o.id === `remove-${ing}`) && <X className="w-3 h-3" />}
                         </div>
@@ -686,16 +730,16 @@ export default function CustomerApp() {
                 </div>
               </div>
 
-              <div className="pt-4 space-y-4">
+              <div className="pt-8 space-y-6 border-t border-black/5">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold uppercase opacity-50">Total do Item</span>
-                    <span className="text-xl font-black text-[#7c3aed]">R$ {(currentPrice / 100).toFixed(2)}</span>
+                    <span className="meta-label">Total Customizado</span>
+                    <span className="text-3xl font-display font-black text-[var(--accent)] tracking-tighter">R$ {(currentPrice / 100).toFixed(2)}</span>
                   </div>
                   <button 
                     onClick={addToCartInternal}
-                    className="w-full bg-[#7c3aed] text-white p-5 rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all"
+                    className="w-full bg-[var(--ink)] text-white p-6 rounded-[28px] font-black uppercase tracking-[0.2em] text-xs shadow-2xl active:scale-95 transition-all duration-300"
                   >
-                    ADICIONAR AO CARRINHO
+                    Adicionar ao Pedido
                   </button>
                 </div>
               </motion.div>

@@ -62,7 +62,7 @@ export default function AdminApp() {
   if (loading) return <div className="p-8 bg-black h-screen text-white/50 uppercase tracking-widest text-[10px] flex items-center justify-center">Carregando Painel Administrativo...</div>;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex font-sans overflow-hidden h-screen w-full">
+    <div className="min-h-screen bg-[#050505] text-white flex font-sans overflow-x-hidden h-screen w-full select-none">
       {/* Sidebar */}
       <aside className="w-16 md:w-64 bg-black border-r border-white/5 flex flex-col p-6 gap-8">
         <div className="p-2 font-black text-xl italic tracking-tighter text-[#7c3aed] uppercase hidden md:block">ADMIN DASH</div>

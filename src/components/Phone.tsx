@@ -1,8 +1,10 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { RoundedBox, Html } from '@react-three/drei';
+import { RoundedBox, Html, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import CustomerApp from './CustomerApp';
+import AdminApp from './AdminApp';
+import DriverApp from './DriverApp';
 
 interface PhoneProps {
   scrollRef: React.MutableRefObject<number>;
@@ -20,10 +22,10 @@ export default function Phone({ scrollRef }: PhoneProps) {
 
   const mats = useMemo(() => ({
     case: new THREE.MeshPhysicalMaterial({ 
-      color: "#080808", metalness: 0.9, roughness: 0.1, envMapIntensity: 1, clearcoat: 1, clearcoatRoughness: 0 
+      color: "#080808", metalness: 0.95, roughness: 0.1, envMapIntensity: 1.5, clearcoat: 1, clearcoatRoughness: 0 
     }),
     frame: new THREE.MeshPhysicalMaterial({ 
-      color: "#1a1a1a", metalness: 1, roughness: 0.05, wireframe: true 
+      color: "#1a1a1a", metalness: 0.8, roughness: 0.2, wireframe: false 
     }),
     screen: new THREE.MeshStandardMaterial({ color: "#000", metalness: 1, roughness: 1 }),
     island: new THREE.MeshBasicMaterial({ color: "#000" })
@@ -34,67 +36,67 @@ export default function Phone({ scrollRef }: PhoneProps) {
     lerpT: 0,
     pos: new THREE.Vector3(),
     rot: new THREE.Euler(),
-    scale: 1
+    scale: 0.8
   });
 
   useFrame((state, delta) => {
     if (!phoneRef.current) return;
 
-    // Detect touch for damping adjustment
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const dampFactor = isTouch ? 6 : 4; // Quicker response on mobile
+    const dampFactor = isTouch ? 6 : 4;
 
     const targetT = scrollRef.current;
     const time = state.clock.getElapsedTime();
     
-    // Smooth the progress value itself first
-    internalRef.current.lerpT = THREE.MathUtils.damp(internalRef.current.lerpT, targetT, dampFactor, delta);
+    // Smooth the progress value
+    internalRef.current.lerpT = THREE.MathUtils.damp(internalRef.current.lerpT, targetT, dampFactor * 0.8, delta);
     const t = internalRef.current.lerpT;
 
     const targetPos = new THREE.Vector3();
     const targetRot = new THREE.Euler();
-    let targetScale = 1;
+    let targetScale = 0.8;
     let visible = true;
     
-    // Animate transformations based on t
-    if (t < 0.1) {
-      visible = t > 0.08;
-      const localT = Math.max(0, (t - 0.08) / 0.02);
-      targetScale = 0.6 + localT * 0.4;
-      targetRot.set(0, THREE.MathUtils.lerp(-Math.PI * 0.1, 0, localT), 0);
-      targetPos.set(0, Math.sin(time * 0.5) * 0.05, 0);
+    // NARRATIVE ANIMATIONS (Matching App.tsx Scenes)
+    
+    // Initial State: Center (0 - 0.1)
+    if (t < 0.15) {
+      targetPos.set(0, 0, 0);
+      targetRot.set(0, Math.sin(time * 0.5) * 0.1, 0);
+      targetScale = THREE.MathUtils.lerp(0, 0.8, Math.min(1, t * 10));
     } 
-    else if (t < 0.25) {
-      visible = true;
-      const zoomT = Math.min(1, (t - 0.1) / 0.05);
-      const slideT = Math.max(0, (t - 0.15) / 0.1);
-      targetScale = 1 + zoomT * 0.4;
-      const posX = THREE.MathUtils.lerp(0, -2, slideT);
-      targetPos.set(posX, Math.sin(time * 0.5) * 0.05, 0);
-      targetRot.set(0, Math.PI * 0.05 * slideT, 0);
+    // Feature 1: Slide Left for Customer App (0.15 - 0.35)
+    else if (t < 0.35) {
+      const localT = (t - 0.15) / 0.2;
+      targetPos.set(THREE.MathUtils.lerp(0, -2, localT), 0, THREE.MathUtils.lerp(0, 1, localT));
+      targetRot.set(0, localT * Math.PI * 0.1, 0);
+      targetScale = 0.8 + localT * 0.2;
     }
-    else if (t < 0.5) {
-      const localT = (t - 0.25) / 0.25;
-      const zoomIn = Math.sin(localT * Math.PI) * 0.5;
-      targetScale = 1.4 + zoomIn;
-      targetPos.set(-2 + localT * 1, Math.sin(time * 0.5) * 0.05, zoomIn * 2);
-      targetRot.set(0, Math.PI * 0.05 + localT * -0.1, 0);
+    // Feature 2: Slide Right for Admin Power (0.35 - 0.55)
+    else if (t < 0.55) {
+      const localT = (t - 0.35) / 0.2;
+      targetPos.set(THREE.MathUtils.lerp(-2, 2, localT), 0, 1);
+      targetRot.set(0, (1 - localT * 2) * Math.PI * 0.1, 0);
+      targetScale = 1;
     }
-    else if (t < 0.7) {
-      const vibrate = t > 0.6 && t < 0.65 ? Math.sin(time * 50) * 0.02 : 0;
-      targetScale = 1.4;
-      targetPos.set(0 + vibrate, Math.sin(time * 0.5) * 0.05, 2);
-      targetRot.set(0, Math.sin(time * 2) * 0.05, 0);
+    // Feature 3: Action / Notification Hero (0.55 - 0.75)
+    else if (t < 0.75) {
+      const localT = (t - 0.55) / 0.2;
+      targetPos.set(THREE.MathUtils.lerp(2, 0, localT), THREE.MathUtils.lerp(0, 0.5, localT), THREE.MathUtils.lerp(1, 2, localT));
+      targetRot.set(Math.sin(time * 2) * 0.05, 0, 0);
+      targetScale = 1 + localT * 0.2;
     }
+    // Final Offer: Top Center (0.75 - 1.0)
     else {
-      const localT = Math.min(1, (t - 0.7) / 0.05);
-      targetScale = 1.4 * (1 - localT);
-      targetPos.set(0, 0, 2 - localT * 5);
-      visible = localT < 1;
+      const localT = (t - 0.75) / 0.25;
+      targetPos.set(0, THREE.MathUtils.lerp(0.5, 3, localT), 2);
+      targetRot.set(localT * -Math.PI * 0.2, 0, 0);
+      targetScale = 1.2 * (1 - localT * 0.5);
+      visible = localT < 0.95;
     }
 
-    // Apply smoothed transformations with damp
-    phoneRef.current.position.lerp(targetPos, isTouch ? 0.2 : 0.1);
+    // Apply smoothed transformations
+    phoneRef.current.position.lerp(targetPos, 0.1);
     phoneRef.current.rotation.x = THREE.MathUtils.damp(phoneRef.current.rotation.x, targetRot.x, dampFactor, delta);
     phoneRef.current.rotation.y = THREE.MathUtils.damp(phoneRef.current.rotation.y, targetRot.y, dampFactor, delta);
     phoneRef.current.rotation.z = THREE.MathUtils.damp(phoneRef.current.rotation.z, targetRot.z, dampFactor, delta);
@@ -102,48 +104,56 @@ export default function Phone({ scrollRef }: PhoneProps) {
     phoneRef.current.visible = visible;
   });
 
+  // Decide which screen to show based on scroll progress
+  const renderScreen = () => {
+    const t = scrollRef.current;
+    if (t < 0.4) return <CustomerApp />;
+    if (t < 0.65) return <AdminApp />;
+    return <DriverApp />;
+  };
+
   return (
-    <group ref={phoneRef}>
-      {/* Dynamic Key Lighting */}
-      <spotLight position={[5, 10, 5]} intensity={1.5} color="#7c3aed" />
-      <spotLight position={[-5, 5, -5]} intensity={0.5} color="#ef4444" />
-      
-      {/* High-End Atmospheric Glow Plane */}
-      <mesh position={[0, 0, -0.2]} scale={[1.2, 1.2, 1]}>
-        <planeGeometry args={[4, 6]} />
-        <meshBasicMaterial color="#7c3aed" transparent opacity={0.05} blending={THREE.AdditiveBlending} />
-      </mesh>
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+      <group ref={phoneRef}>
+        {/* Dynamic Key Lighting Linked to Position */}
+        <pointLight position={[2, 2, 2]} intensity={2} color="#7c3aed" />
+        <pointLight position={[-2, -2, 2]} intensity={1} color="#ef4444" />
+        
+        <RoundedBox args={[2, 4, 0.15]} radius={0.15} smoothness={4} material={mats.case} />
+        <RoundedBox args={[2.02, 4.02, 0.1]} radius={0.16} smoothness={4} position={[0,0,0]} material={mats.frame} />
 
-      <RoundedBox args={[2, 4, 0.15]} radius={0.15} smoothness={4} material={mats.case} />
-      <RoundedBox args={[2.02, 4.02, 0.1]} radius={0.16} smoothness={4} position={[0,0,0]} material={mats.frame} />
+        <mesh ref={screenRef} position={[0, 0, 0.08]} geometry={geoms.screen} material={mats.screen} />
 
-      <mesh ref={screenRef} position={[0, 0, 0.08]} geometry={geoms.screen} material={mats.screen} />
+        <group position={[0, 0, 0.085]}>
+          <Html
+            transform
+            distanceFactor={2.1}
+            position={[0, 0, 0]}
+            scale={0.5} 
+            occlude="blending"
+            eps={0.0001}
+            style={{
+              width: '375px',
+              height: '812px',
+              backgroundColor: '#050505',
+              overflow: 'hidden',
+              borderRadius: '44px',
+              boxSizing: 'border-box',
+              boxShadow: '0 0 40px rgba(0,0,0,0.5)',
+              transform: 'scale(1)',
+              pointerEvents: 'auto'
+            }}
+          >
+            <div className="w-full h-full origin-top overflow-hidden no-scrollbar pointer-events-auto bg-[#050505]">
+              <div className="w-full h-auto scale-[1]">
+                {renderScreen()}
+              </div>
+            </div>
+          </Html>
+        </group>
 
-      <group position={[0, 0, 0.085]}>
-        <Html
-          transform
-          distanceFactor={2}
-          position={[0, 0, 0]}
-          scale={0.5} 
-          occlude="blending"
-          eps={0.0001} // High Precision to prevent jitter
-          style={{
-            width: '375px',
-            height: '812px',
-            backgroundColor: 'black',
-            overflow: 'auto',
-            borderRadius: '44px',
-            boxSizing: 'border-box',
-            boxShadow: '0 0 40px rgba(124,58,237,0.2)'
-          }}
-        >
-          <div className="w-full h-full scale-[1] origin-top overflow-auto no-scrollbar pointer-events-auto">
-            <CustomerApp />
-          </div>
-        </Html>
+        <mesh position={[0, 1.82, 0.081]} geometry={geoms.island} material={mats.island} />
       </group>
-
-      <mesh position={[0, 1.82, 0.081]} geometry={geoms.island} material={mats.island} />
-    </group>
+    </Float>
   );
 }
