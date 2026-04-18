@@ -7,9 +7,108 @@ import {
 } from 'lucide-react';
 import { useCart } from '../store/useCart';
 
+const CINEMATIC_IMAGES = [
+  "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1920&q=80"
+];
+
+const CinematicBackground = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % CINEMATIC_IMAGES.length);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, scale: 1.15, rotate: 2 }}
+          animate={{ opacity: 0.5, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 0.9, rotate: -2 }}
+          transition={{ duration: 4, ease: [0.4, 0, 0.2, 1] }}
+          className="absolute inset-0"
+        >
+          <img 
+            src={CINEMATIC_IMAGES[index]} 
+            alt="Cinematic Background" 
+            className="w-full h-full object-cover grayscale-[0.3] brightness-[0.4]"
+            referrerPolicy="no-referrer"
+          />
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Dynamic Overlays for Cinematic Feel */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+      
+      {/* Moving Light Streaks */}
+      <motion.div 
+        animate={{ 
+          x: ['-200%', '200%'],
+          opacity: [0, 0.15, 0]
+        }}
+        transition={{ 
+          duration: 15, 
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        className="absolute top-1/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent shadow-[0_0_40px_rgba(124,58,237,0.5)] rotate-[-15deg]"
+      />
+      <motion.div 
+        animate={{ 
+          x: ['200%', '-200%'],
+          opacity: [0, 0.1, 0]
+        }}
+        transition={{ 
+          duration: 12, 
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        className="absolute bottom-1/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#ef4444] to-transparent shadow-[0_0_30px_rgba(239,68,68,0.4)] rotate-[10deg]"
+      />
+
+      {/* Floating Particles (Anime Style Motes) */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            x: Math.random() * 100 + '%', 
+            y: Math.random() * 100 + '%',
+            opacity: 0 
+          }}
+          animate={{ 
+            y: ['0%', '100%'],
+            x: [Math.random() * 100 + '%', Math.random() * 100 + '%'],
+            opacity: [0, 0.3, 0]
+          }}
+          transition={{ 
+            duration: 15 + Math.random() * 10,
+            repeat: Infinity,
+            delay: Math.random() * 10
+          }}
+          className="absolute w-1 h-1 bg-white rounded-full blur-[1px] shadow-[0_0_8px_white]"
+        />
+      ))}
+      {/* Film Grain Overlay */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+    </div>
+  );
+};
+
 const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: any) => void }) => (
-  <div 
-    className="bg-white/5 rounded-[32px] overflow-hidden border border-white/5 hover:border-[#7c3aed]/30 transition-all group flex flex-col gpu"
+  <motion.div 
+    variants={{
+      hidden: { opacity: 0, y: 20, scale: 0.95 },
+      show: { opacity: 1, y: 0, scale: 1 }
+    }}
+    className="bg-white/10 backdrop-blur-md rounded-[32px] overflow-hidden border border-white/10 hover:border-[#7c3aed]/50 transition-all group flex flex-col gpu"
   >
     <div className="relative aspect-square overflow-hidden">
       <img 
@@ -39,7 +138,7 @@ const ProductCard = memo(({ product, onSelect }: { product: any, onSelect: (p: a
         <Plus className="w-4 h-4" /> ADICIONAR AO CARRINHO
       </button>
     </div>
-  </div>
+  </motion.div>
 ));
 
 export default function CustomerApp() {
@@ -190,12 +289,14 @@ export default function CustomerApp() {
   );
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans max-w-md mx-auto relative shadow-2xl overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-black/40 text-white font-sans max-w-md mx-auto relative shadow-2xl overflow-hidden flex flex-col backdrop-blur-[2px]">
+      <CinematicBackground />
+      
       {/* Dynamic Header */}
-      <header className="p-6 pb-2">
+      <header className="p-6 pb-2 relative z-10">
         <div className="flex justify-between items-start mb-6">
           <div onClick={() => setActiveView('menu')} className="cursor-pointer">
-            <h1 className="text-2xl font-black uppercase tracking-tighter">Global Burger</h1>
+            <h1 className="text-2xl font-black uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(124,58,237,0.5)]">Global Burger</h1>
             <p className="text-[10px] uppercase tracking-widest opacity-50 flex items-center gap-1">
               <Clock className="w-3 h-3" /> 20-35 min • $ 5.00
             </p>
@@ -236,14 +337,21 @@ export default function CustomerApp() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto px-6 pb-32 no-scrollbar">
+      <main className="flex-1 overflow-y-auto px-6 pb-32 no-scrollbar relative z-10">
         <AnimatePresence mode="wait">
           {activeView === 'menu' && (
             <motion.div
               key="menu"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.1 }
+                }
+              }}
+              initial="hidden"
+              animate="show"
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
               className="space-y-4"
             >
               {filteredProducts.length === 0 ? (
@@ -433,7 +541,7 @@ export default function CustomerApp() {
 
       {/* Floating Bottom Navigation */}
       {activeView !== 'success' && (
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent z-20">
           {activeView === 'menu' && (
             <button 
               onClick={() => setActiveView('cart')}
