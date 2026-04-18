@@ -8,11 +8,15 @@ interface SceneProps {
 }
 
 export default function Scene({ scrollRef }: SceneProps) {
+  // Balanced DPR for Mobile vs Desktop
+  const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  const dpr: [number, number] = isTouch ? [1, 1.5] : [1, 2];
+
   return (
     <div className="fixed inset-0 pointer-events-none z-10">
       <Canvas 
         shadows 
-        dpr={[1, 2]} // Support for Retina/High-DPI 
+        dpr={dpr} 
         gl={{ 
           antialias: true,
           powerPreference: "high-performance",

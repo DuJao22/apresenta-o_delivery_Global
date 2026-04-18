@@ -40,11 +40,15 @@ export default function Phone({ scrollRef }: PhoneProps) {
   useFrame((state, delta) => {
     if (!phoneRef.current) return;
 
+    // Detect touch for damping adjustment
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const dampFactor = isTouch ? 6 : 4; // Quicker response on mobile
+
     const targetT = scrollRef.current;
     const time = state.clock.getElapsedTime();
     
     // Smooth the progress value itself first
-    internalRef.current.lerpT = THREE.MathUtils.damp(internalRef.current.lerpT, targetT, 4, delta);
+    internalRef.current.lerpT = THREE.MathUtils.damp(internalRef.current.lerpT, targetT, dampFactor, delta);
     const t = internalRef.current.lerpT;
 
     const targetPos = new THREE.Vector3();
@@ -90,11 +94,11 @@ export default function Phone({ scrollRef }: PhoneProps) {
     }
 
     // Apply smoothed transformations with damp
-    phoneRef.current.position.lerp(targetPos, 0.1);
-    phoneRef.current.rotation.x = THREE.MathUtils.damp(phoneRef.current.rotation.x, targetRot.x, 4, delta);
-    phoneRef.current.rotation.y = THREE.MathUtils.damp(phoneRef.current.rotation.y, targetRot.y, 4, delta);
-    phoneRef.current.rotation.z = THREE.MathUtils.damp(phoneRef.current.rotation.z, targetRot.z, 4, delta);
-    phoneRef.current.scale.setScalar(THREE.MathUtils.damp(phoneRef.current.scale.x, targetScale, 4, delta));
+    phoneRef.current.position.lerp(targetPos, isTouch ? 0.2 : 0.1);
+    phoneRef.current.rotation.x = THREE.MathUtils.damp(phoneRef.current.rotation.x, targetRot.x, dampFactor, delta);
+    phoneRef.current.rotation.y = THREE.MathUtils.damp(phoneRef.current.rotation.y, targetRot.y, dampFactor, delta);
+    phoneRef.current.rotation.z = THREE.MathUtils.damp(phoneRef.current.rotation.z, targetRot.z, dampFactor, delta);
+    phoneRef.current.scale.setScalar(THREE.MathUtils.damp(phoneRef.current.scale.x, targetScale, dampFactor, delta));
     phoneRef.current.visible = visible;
   });
 

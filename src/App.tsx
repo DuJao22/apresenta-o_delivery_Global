@@ -26,10 +26,15 @@ function LandingPage() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
+    // Detect mobile for specialized momentum tuning
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     const lenis = new Lenis({
-      duration: 1.5,
+      duration: isTouch ? 1.2 : 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      touchMultiplier: 1.5, // Better response on touch
+      infinite: false,
     });
     
     function raf(time: number) {
@@ -53,7 +58,7 @@ function LandingPage() {
         trigger: containerRef.current,
         start: "top top",
         end: "bottom bottom",
-        scrub: 2.0, // Substantially smoother momentum
+        scrub: isTouch ? 0.5 : 2.0, // Quicker response for touch, luxury inertia for desktop
       }
     });
 
