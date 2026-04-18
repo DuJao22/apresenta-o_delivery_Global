@@ -300,7 +300,7 @@ function LandingPage() {
              </div>
 
              <button 
-              onClick={() => navigate('/app')}
+              onClick={() => window.location.href = 'https://delivery-global.onrender.com/'}
               className="w-full bg-black text-white p-6 rounded-3xl font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 hover:bg-[#00ff00] hover:text-black transition-all group"
              >
                Quero meu sistema agora <ArrowRight className="group-hover:translate-x-2 transition-transform" />
