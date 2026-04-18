@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   ArrowRight, Zap, Smartphone, BarChart3, 
   TrendingUp, Package, Bell, DollarSign, CheckCircle,
-  Truck, MousePointer2, ChevronRight, Users
+  Truck, MousePointer2, ChevronRight, Users, Mouse
 } from 'lucide-react';
 import Lenis from '@studio-freight/lenis';
 import gsap from 'gsap';
@@ -14,10 +14,12 @@ import CustomerApp from './components/CustomerApp';
 import AdminApp from './components/AdminApp';
 import DriverApp from './components/DriverApp';
 import Phone from './components/Phone';
+import IntroLoader from './components/IntroLoader';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function LandingPage() {
+  const [introFinished, setIntroFinished] = useState(false);
   const scrollRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const narrativeRef = useRef<HTMLDivElement>(null);
@@ -51,18 +53,21 @@ function LandingPage() {
         trigger: containerRef.current,
         start: "top top",
         end: "bottom bottom",
-        scrub: true,
+        scrub: 1.5,
       }
     });
 
     // Integrated Progress Bar Animation
     tl.fromTo(".progress-bar-fill", { scaleX: 0 }, { scaleX: 1, ease: "none" }, 0);
 
+    // Scroll Indicator Fade Out
+    tl.to(".scroll-indicator", { opacity: 0, y: 20, duration: 0.5 }, 0.01);
+
     // Scene 1: Impact (0-10%)
-    tl.fromTo(".narrative-1", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 1 })
-      .to(".narrative-1", { opacity: 0, filter: "blur(10px)", duration: 1 }, "+=0.5")
-      .fromTo(".narrative-2", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 1 })
-      .to(".narrative-2", { opacity: 0, filter: "blur(10px)", duration: 1 }, "+=0.5");
+    tl.fromTo(".narrative-1", { opacity: 0, filter: "blur(10px)", force3D: true }, { opacity: 1, filter: "blur(0px)", duration: 1 })
+      .to(".narrative-1", { opacity: 0, filter: "blur(10px)", force3D: true, duration: 1 }, "+=0.5")
+      .fromTo(".narrative-2", { opacity: 0, filter: "blur(10px)", force3D: true }, { opacity: 1, filter: "blur(0px)", duration: 1 })
+      .to(".narrative-2", { opacity: 0, filter: "blur(10px)", force3D: true, duration: 1 }, "+=0.5");
 
     // Scene 2: Entry (10-25%)
     tl.fromTo(".narrative-3", { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 1.5 });
@@ -110,10 +115,21 @@ function LandingPage() {
 
   return (
     <div ref={containerRef} className="bg-[#050505] text-white selection:bg-[#00ff00] selection:text-black min-h-[6000px] grain overflow-x-hidden">
+      <AnimatePresence mode="wait">
+        {!introFinished && (
+          <IntroLoader key="loader" onComplete={() => setIntroFinished(true)} />
+        )}
+      </AnimatePresence>
+
       {/* 3D Scene Layer (Always active, no re-renders from state) */}
-      <div className="fixed inset-0 z-0 overflow-hidden">
+      <motion.div 
+        initial={{ opacity: 0, filter: 'blur(20px)' }}
+        animate={introFinished ? { opacity: 1, filter: 'blur(0px)' } : {}}
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="fixed inset-0 z-0 overflow-hidden"
+      >
         <Scene scrollRef={scrollRef} />
-      </div>
+      </motion.div>
 
       {/* Scroll Progress Bar (Apple style) */}
       <div className="fixed top-0 left-0 w-full h-[2px] bg-white/5 z-[200]">
@@ -121,34 +137,66 @@ function LandingPage() {
           className="progress-bar-fill h-full bg-[#00ff00] origin-left shadow-[0_0_10px_rgba(0,255,0,0.5)]"
         />
       </div>
-      <nav className="fixed top-0 w-full z-[100] px-8 py-10 flex justify-between items-center pointer-events-none">
-        <motion.div 
-          className="text-2xl font-black tracking-tighter pointer-events-auto cursor-pointer font-heading uppercase"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          Delivery Global
-        </motion.div>
-        
-        <div className="flex gap-12 text-[10px] font-black tracking-[0.3em] uppercase opacity-40 pointer-events-auto items-center">
-          <button onClick={() => navigate('/app')} className="hover:text-[#00ff00] transition-colors">Experience</button>
-          <button onClick={() => navigate('/admin')} className="hover:text-[#00ff00] transition-colors">Terminal</button>
-          <div className="flex items-end gap-[2px] h-3 ml-4">
-            {[...Array(6)].map((_, i) => (
-              <motion.div 
-                key={i}
-                className="w-[1px] bg-white/40"
-                animate={{ height: [2, 12, 4, 10, 2] }}
-                transition={{ duration: 1 + i * 0.2, repeat: Infinity, ease: "linear" }}
-              />
-            ))}
-          </div>
-        </div>
-      </nav>
+      
+      <AnimatePresence>
+        {introFinished && (
+          <>
+            <motion.nav 
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+              className="fixed top-0 w-full z-[100] px-8 py-10 flex justify-between items-center pointer-events-none"
+            >
+              <div 
+                className="text-2xl font-black tracking-tighter pointer-events-auto cursor-pointer font-heading uppercase"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              >
+                Delivery Global
+              </div>
+              
+              <div className="flex gap-12 text-[10px] font-black tracking-[0.3em] uppercase opacity-40 pointer-events-auto items-center">
+                <button onClick={() => navigate('/app')} className="hover:text-[#00ff00] transition-colors">Experience</button>
+                <button onClick={() => navigate('/admin')} className="hover:text-[#00ff00] transition-colors">Terminal</button>
+                <div className="flex items-end gap-[2px] h-3 ml-4">
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div 
+                      key={i}
+                      className="w-[1px] bg-white/40"
+                      animate={{ height: [2, 12, 4, 10, 2] }}
+                      transition={{ duration: 1 + i * 0.2, repeat: Infinity, ease: "linear" }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.nav>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1.5 }}
+              className="scroll-indicator fixed bottom-12 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-4 pointer-events-none"
+            >
+              <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-[#00ff00]/50 to-transparent relative overflow-hidden">
+                <motion.div 
+                  animate={{ y: [0, 48] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-0 left-0 w-full h-1/4 bg-[#00ff00]"
+                />
+              </div>
+              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#00ff00] opacity-60">Scroll para explorar</p>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Narrative Overlay Layer */}
-      <div ref={narrativeRef} className="fixed inset-0 z-10 pointer-events-none flex items-center justify-center p-8">
+      <motion.div 
+        ref={narrativeRef} 
+        initial={{ opacity: 0 }}
+        animate={introFinished ? { opacity: 1 } : {}}
+        transition={{ delay: 1 }}
+        className="fixed inset-0 z-10 pointer-events-none flex items-center justify-center p-8"
+      >
         <div className="max-w-4xl w-full text-center relative h-full flex items-center justify-center">
           
           {/* Scene 1 */}
@@ -260,7 +308,7 @@ function LandingPage() {
           </div>
 
         </div>
-      </div>
+      </motion.div>
 
       {/* Atmospheric Overlays */}
       <div className="fixed inset-0 pointer-events-none z-0 atmos-bg opacity-30" />
