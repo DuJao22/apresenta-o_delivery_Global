@@ -12,13 +12,14 @@ export default function Scene({ scrollRef }: SceneProps) {
     <div className="fixed inset-0 pointer-events-none z-10">
       <Canvas 
         shadows 
-        dpr={[1, 1.5]}
+        dpr={[1, 2]} // Support for Retina/High-DPI 
         gl={{ 
           antialias: true,
           powerPreference: "high-performance",
           alpha: true,
           stencil: false,
-          depth: true
+          depth: true,
+          precision: "highp",
         }}
       >
         <AdaptiveDpr pixelated />

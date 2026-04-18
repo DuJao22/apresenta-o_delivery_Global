@@ -53,7 +53,7 @@ function LandingPage() {
         trigger: containerRef.current,
         start: "top top",
         end: "bottom bottom",
-        scrub: 1.5,
+        scrub: 2.0, // Substantially smoother momentum
       }
     });
 
