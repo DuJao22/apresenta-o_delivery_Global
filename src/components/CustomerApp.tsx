@@ -47,6 +47,7 @@ export default function CustomerApp() {
   const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
@@ -60,15 +61,29 @@ export default function CustomerApp() {
   const [payment, setPayment] = useState({ method: 'PIX', change: '' });
 
   useEffect(() => {
+    loadMenu();
+  }, []);
+
+  const loadMenu = () => {
+    setLoading(true);
+    setError(null);
     fetch('/api/menu')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('API indisponível');
+        return res.json();
+      })
       .then(data => {
         setCategories(data.categories);
         setProducts(data.products);
         if (data.categories.length > 0) setActiveCategory(data.categories[0].id);
         setLoading(false);
+      })
+      .catch(err => {
+        console.error("Menu load error:", err);
+        setError("Não foi possível carregar o cardápio. Verifique sua conexão.");
+        setLoading(false);
       });
-  }, []);
+  };
 
   const filteredProducts = useMemo(() => {
     let result = products;
@@ -155,6 +170,24 @@ export default function CustomerApp() {
   };
 
   if (loading) return <div className="p-8 text-center text-white/50 uppercase tracking-widest text-xs h-screen flex items-center justify-center">Carregando Cardápio...</div>;
+
+  if (error) return (
+    <div className="p-10 text-center text-white space-y-6 h-screen flex flex-col items-center justify-center bg-black">
+      <div className="w-16 h-16 bg-[#ef4444]/20 rounded-full flex items-center justify-center text-[#ef4444] mb-4">
+        <Info className="w-8 h-8" />
+      </div>
+      <h2 className="text-xl font-black uppercase tracking-tighter">Erro de Conexão</h2>
+      <p className="text-[10px] opacity-60 uppercase tracking-widest text-center px-4 leading-relaxed">
+        {error}
+      </p>
+      <button 
+        onClick={loadMenu}
+        className="px-8 py-4 bg-[#7c3aed] text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg active:scale-95 transition-all"
+      >
+        Tentar Novamente
+      </button>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-black text-white font-sans max-w-md mx-auto relative shadow-2xl overflow-hidden flex flex-col">
